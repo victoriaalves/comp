@@ -32,19 +32,23 @@ int lineNumber = 1;
 "=="													return OPERATOR_EQ;
 "!="													return OPERATOR_DIF;
 
+"TRUE"												return LIT_TRUE;
+"FALSE"												return LIT_FALSE;
+
 [A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
 [0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
 [0-9]+\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
+'.'                           {hashInsert(yytext); return LIT_CHAR;}
 
 [,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
 
 [ \t]
-"\n" 						++lineNumber;
+"\n" 													++lineNumber;
 "//".*
 .
-"###"						BEGIN(COMMENT);
-<COMMENT>"###"				BEGIN(INITIAL);
-<COMMENT>"\n"				++lineNumber;
+"###"													BEGIN(COMMENT);
+<COMMENT>"###"								BEGIN(INITIAL);
+<COMMENT>"\n"									++lineNumber;
 <COMMENT>.
 
 
