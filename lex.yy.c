@@ -962,54 +962,54 @@ return TOKEN_ERROR;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 59 "scanner.l"
+#line 57 "scanner.l"
 BEGIN(INITIAL);
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 60 "scanner.l"
+#line 58 "scanner.l"
 ++lineNumber;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 61 "scanner.l"
+#line 59 "scanner.l"
 
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 63 "scanner.l"
+#line 61 "scanner.l"
 {*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 64 "scanner.l"
+#line 62 "scanner.l"
 {*c++ = '\n';}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 65 "scanner.l"
+#line 63 "scanner.l"
 {*c++ = '\t'; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 66 "scanner.l"
+#line 64 "scanner.l"
 {*c++ = '\"';}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 67 "scanner.l"
+#line 65 "scanner.l"
 {*c++ = *yytext;}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 68 "scanner.l"
+#line 66 "scanner.l"
 {++lineNumber; *c++ = '\n';}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 70 "scanner.l"
+#line 68 "scanner.l"
 ECHO;
 	YY_BREAK
 #line 1016 "lex.yy.c"
@@ -2011,7 +2011,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 70 "scanner.l"
+#line 68 "scanner.l"
 
 
 

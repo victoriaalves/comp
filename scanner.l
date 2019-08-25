@@ -54,8 +54,6 @@ char *c;
 "###"													BEGIN(COMMENT);
 .															return TOKEN_ERROR;
 
-
-
 <COMMENT>"###"								BEGIN(INITIAL);
 <COMMENT>"\n"									++lineNumber;
 <COMMENT>.
