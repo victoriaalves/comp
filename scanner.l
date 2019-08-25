@@ -1,13 +1,17 @@
 %{
 
 #include "hash.c"
-#include "token.h"
+#include "tokens.h"
 
 int lineNumber = 1;
+
+char buf[1000];
+char *c;
 
 %}
 
 %x COMMENT
+%x STRING
 
 %%
 
@@ -39,6 +43,7 @@ int lineNumber = 1;
 [0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
 [0-9]+\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
 '.'                           {hashInsert(yytext); return LIT_CHAR;}
+"\""                          {BEGIN(STRING); c = buf; *c++ = *yytext; return LIT_STRING;}
 
 [,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
 
@@ -47,10 +52,17 @@ int lineNumber = 1;
 "//".*
 .
 "###"													BEGIN(COMMENT);
+
 <COMMENT>"###"								BEGIN(INITIAL);
 <COMMENT>"\n"									++lineNumber;
 <COMMENT>.
 
+<STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
+<STRING>\\n             			{*c++ = '\n';}
+<STRING>\\t             			{*c++ = '\t'; }
+<STRING>\\\"            			{*c++ = '\"';}
+<STRING>.               			{*c++ = *yytext;}
+<STRING>\n              			{++lineNumber; *c++ = '\n';}
 
 %%
 

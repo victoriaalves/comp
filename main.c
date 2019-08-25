@@ -60,13 +60,13 @@ int main()
 			case LIT_FLOAT:
 				fprintf(stderr, "Literal Float.\n"); break;
 
-			/*case LIT_CHAR:
+			case LIT_CHAR:
 				fprintf(stderr, "Literal Char.\n"); break;
-			case LIT_SRING:
+			case LIT_STRING:
 				fprintf(stderr, "Literal String.\n"); break;
-			case LIT_ERROR:
-				fprintf(stderr, "Error.\n"); break;
-			*/
+			//case TOKEN_ERROR:
+			//	fprintf(stderr, "Error.\n"); break;
+
 
 			default:
 				fprintf(stderr, "Token ascii %c\n", tok); break;

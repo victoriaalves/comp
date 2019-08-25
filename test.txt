@@ -12,3 +12,8 @@ int // int lolooo
 ;
 TRUE
 FALSE
+"meu nome"
+"oi"
+"Mensagem!"
+"unicorn"
+"melancia"
