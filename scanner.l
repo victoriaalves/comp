@@ -51,9 +51,10 @@ char *c;
 [ \t]
 "\n" 													++lineNumber;
 "//".*
-.
-
 "###"													BEGIN(COMMENT);
+.															return TOKEN_ERROR;
+
+
 
 <COMMENT>"###"								BEGIN(INITIAL);
 <COMMENT>"\n"									++lineNumber;

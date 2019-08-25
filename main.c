@@ -64,9 +64,8 @@ int main()
 				fprintf(stderr, "Line %d: LITERAL\n", getLineNumber()); break;
 			case LIT_STRING:
 				fprintf(stderr, "Line %d: LITERAL STRING\n", getLineNumber()); break;
-			//case TOKEN_ERROR:
-			//	fprintf(stderr, "Error.\n"); break;
-
+			case TOKEN_ERROR:
+				fprintf(stderr, "Line %d: ERROR\n", getLineNumber()); break;
 
 			default:
 				fprintf(stderr, "Line %d: TOKEN ASCII\n", getLineNumber()); break;
