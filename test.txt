@@ -4,16 +4,13 @@ g7
 lolo
 _9
 ###
-.9
 0.9
+.9
 int // int lolooo
-@#$%%^
-+-()
++
 ;
 TRUE
 FALSE
 "meu nome"
-"oi"
-"Mensagem!"
 "unicorn"
 "melancia"

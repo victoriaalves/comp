@@ -4,6 +4,7 @@
 #include "tokens.h"
 
 int lineNumber = 1;
+int running;
 
 char buf[1000];
 char *c;
@@ -51,6 +52,7 @@ char *c;
 "\n" 													++lineNumber;
 "//".*
 .
+
 "###"													BEGIN(COMMENT);
 
 <COMMENT>"###"								BEGIN(INITIAL);
@@ -68,6 +70,14 @@ char *c;
 
 int running = 1;
 
+int getLineNumber(void){
+    return lineNumber;
+}
+
+int isRunning(void){
+    return running;
+}
+
 int yywrap()
 {
 	running = 0;
@@ -75,7 +85,11 @@ int yywrap()
 }
 
 void initMe(void){
+	lineNumber = 1;
+	running = 1;
 	hashInit();
 }
 
 #include "main.c"
+
+
