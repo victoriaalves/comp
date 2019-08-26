@@ -9,9 +9,11 @@ _9
 int // int lolooo
 +
 ;
+17
 TRUE
 FALSE
-"meu nome"
+º
+"meu
+nome"
 "unicorn"
 "melancia"
-æ
