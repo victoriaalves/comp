@@ -110,10 +110,10 @@ int main(int argc, char **argv)
 
     /*
     if (tok == ans) {
-      fprintf(stderr, "Line %d: Ok\n\n", getLineNumber());
+      fprintf(stderr, "Line %d: Ok\n", getLineNumber());
     }
     else {
-      fprintf(stderr, "Line %d: %d\n\n", getLineNumber(), tok);
+      fprintf(stderr, "Line %d: %d\n", getLineNumber(), *yytext);
     }*/
 
   }

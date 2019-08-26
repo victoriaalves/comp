@@ -49,20 +49,20 @@ char *c;
 
 [,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
 
-  [ \t]
-    "\n" 													++lineNumber;
-  "//".*
-    "###"													BEGIN(COMMENT);
-  .															return TOKEN_ERROR;
+[ \t]
+"\n" 													++lineNumber;
+"//".*
+"###"													BEGIN(COMMENT);
+.															return TOKEN_ERROR;
 
-  <COMMENT>"###"								BEGIN(INITIAL);
-  <COMMENT>"\n"									++lineNumber;
-  <COMMENT>.
+<COMMENT>"###"								BEGIN(INITIAL);
+<COMMENT>"\n"									++lineNumber;
+<COMMENT>.
 
-    <STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
-  <STRING>\\n             			{*c++ = '\n';}
-  <STRING>\\t             			{*c++ = '\t'; }
-  <STRING>\\\"            			{*c++ = '\"';}
+<STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
+<STRING>\\n             			{*c++ = '\n';}
+<STRING>\\t             			{*c++ = '\t'; }
+<STRING>\\\"            			{*c++ = '\"';}
 <STRING>.               			{*c++ = *yytext;}
 <STRING>\n              			{++lineNumber; *c++ = '\n';}
 
