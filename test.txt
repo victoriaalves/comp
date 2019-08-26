@@ -1,3 +1,4 @@
+'a'
 int
 g7
 ###
@@ -5,6 +6,7 @@ lolo
 _9
 ###
 0.9
+"unicorn"
 .9
 int // int lolooo
 +
@@ -13,7 +15,6 @@ int // int lolooo
 TRUE
 FALSE
 º
-"meu
-nome"
-"unicorn"
 "melancia"
+"meu
+ nome"

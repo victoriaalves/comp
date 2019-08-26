@@ -46,6 +46,7 @@ int main(int argc, char **argv)
       break;
 
     fscanf(out, "%d", &ans);
+    /*
     switch(tok)
     {
       case KW_BYTE:
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Line %d: LITERAL FLOAT\n", getLineNumber()); break;
 
       case LIT_CHAR:
-        fprintf(stderr, "Line %d: LITERAL\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: LITERAL CHAR\n", getLineNumber()); break;
       case LIT_STRING:
         fprintf(stderr, "Line %d: LITERAL STRING\n", getLineNumber()); break;
       case TOKEN_ERROR:
@@ -107,14 +108,15 @@ int main(int argc, char **argv)
       default:
         fprintf(stderr, "Line %d: TOKEN ASCII\n", getLineNumber()); break;
     }
+    */
 
-    /*
+    
     if (tok == ans) {
       fprintf(stderr, "Line %d: Ok\n", getLineNumber());
     }
     else {
       fprintf(stderr, "Line %d: %d\n", getLineNumber(), *yytext);
-    }*/
+    }
 
   }
   hashPrint();
