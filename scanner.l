@@ -63,6 +63,7 @@ char *c;
 <STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
 <STRING>\\n             			{*c++ = '\\'; *c++ = 'n';}
 <STRING>\\t             			{*c++ = '\\'; *c++ = 't'; }
+<STRING>\\\"             			{*c++ = '\\'; *c++ = '"'; }
 <STRING>.               			{*c++ = *yytext;}
 <STRING>\t               			{*c++ = '\t';}
 <STRING>\n              			{++lineNumber; *c++ = '\n';}

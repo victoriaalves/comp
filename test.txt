@@ -14,7 +14,7 @@ int // int lolooo
 TRUE
 FALSE
 º
-"mel \\ancia"
+"mel \"anci\" a"
 "meu \n
  nome"
 'a'
