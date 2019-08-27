@@ -64,6 +64,7 @@ char *c;
 <STRING>\\n             			{*c++ = '\\'; *c++ = 'n';}
 <STRING>\\t             			{*c++ = '\\'; *c++ = 't'; }
 <STRING>.               			{*c++ = *yytext;}
+<STRING>\t               			{*c++ = '\t';}
 <STRING>\n              			{++lineNumber; *c++ = '\n';}
 
 %%
