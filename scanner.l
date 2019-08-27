@@ -40,6 +40,8 @@ char *c;
 "TRUE"												return LIT_TRUE;
 "FALSE"												return LIT_FALSE;
 
+[,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
+
 [A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
 [0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
 [0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
@@ -47,7 +49,6 @@ char *c;
 '.'                           {hashInsert(yytext); return LIT_CHAR;}
 "\""                          {BEGIN(STRING); c = buf; *c++ = *yytext; return LIT_STRING;}
 
-[,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
 
 [ \t]
 "\n" 													++lineNumber;
@@ -60,10 +61,10 @@ char *c;
 <COMMENT>.
 
 <STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
-<STRING>\\n             			{*c++ = '\n';}
-<STRING>\\t             			{*c++ = '\t'; }
-<STRING>\\\"            			{*c++ = '\"';}
+<STRING>\\n             			{*c++ = '\\'; *c++ = 'n';}
+<STRING>\\t             			{*c++ = '\\'; *c++ = 't'; }
 <STRING>.               			{*c++ = *yytext;}
+<STRING>\t               			{*c++ = '\t';}
 <STRING>\n              			{++lineNumber; *c++ = '\n';}
 
 %%
