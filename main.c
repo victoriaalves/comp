@@ -46,7 +46,7 @@ int main(int argc, char **argv)
       break;
 
     fscanf(out, "%d", &ans);
-    /*
+    
     switch(tok)
     {
       case KW_BYTE:
@@ -92,30 +92,28 @@ int main(int argc, char **argv)
       case LIT_FALSE:
         fprintf(stderr, "Line %d: FALSE\n", getLineNumber()); break;
       case TK_IDENTIFIER:
-        fprintf(stderr, "Line %d: IDENTIFIER\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: IDENTIFIER %d\n", getLineNumber(), tok); break;
       case LIT_INTEGER:
         fprintf(stderr, "Line %d: LITERAL INTEGER\n", getLineNumber()); break;
       case LIT_FLOAT:
         fprintf(stderr, "Line %d: LITERAL FLOAT\n", getLineNumber()); break;
 
       case LIT_CHAR:
-        fprintf(stderr, "Line %d: LITERAL CHAR\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: LITERAL CHAR %d\n", getLineNumber(), tok); break;
       case LIT_STRING:
-        fprintf(stderr, "Line %d: LITERAL STRING\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: LITERAL STRING %d\n", getLineNumber(), tok); break;
       case TOKEN_ERROR:
-        fprintf(stderr, "Line %d: ERROR\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: ERROR %d\n", getLineNumber(), tok); break;
 
       default:
-        fprintf(stderr, "Line %d: TOKEN ASCII\n", getLineNumber()); break;
+        fprintf(stderr, "Line %d: TOKEN ASCII %d\n", getLineNumber(), tok); break;
     }
-    */
 
-    
     if (tok == ans) {
       fprintf(stderr, "Line %d: Ok\n", getLineNumber());
     }
     else {
-      fprintf(stderr, "Line %d: %d\n", getLineNumber(), *yytext);
+      fprintf(stderr, "**** Line %d: %d\n", getLineNumber(), *yytext);
     }
 
   }
