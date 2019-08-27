@@ -15,6 +15,6 @@ int // int lolooo
 TRUE
 FALSE
 º
-"melancia"
-"meu
+"mel \\ancia"
+"meu \n
  nome"

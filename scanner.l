@@ -60,9 +60,8 @@ char *c;
 <COMMENT>.
 
 <STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
-<STRING>\\n             			{*c++ = '\n';}
-<STRING>\\t             			{*c++ = '\t'; }
-<STRING>\\\"            			{*c++ = '\"';}
+<STRING>\\n             			{*c++ = '\\'; *c++ = 'n';}
+<STRING>\\t             			{*c++ = '\\'; *c++ = 't'; }
 <STRING>.               			{*c++ = *yytext;}
 <STRING>\n              			{++lineNumber; *c++ = '\n';}
 
