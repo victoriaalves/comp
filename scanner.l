@@ -1,7 +1,7 @@
 %{
 
 #include "hash.c"
-#include "tokens.h"
+#include "y.tab.h"
 
 int lineNumber = 1;
 int running = 1;
@@ -54,7 +54,6 @@ char *c;
 "\n" 													++lineNumber;
 "//".*
 "###"													BEGIN(COMMENT);
-.															return TOKEN_ERROR;
 
 <COMMENT>"###"								BEGIN(INITIAL);
 <COMMENT>"\n"									++lineNumber;
@@ -91,3 +90,5 @@ void initMe(void){
   hashInit();
 }
 
+#include "y.tab.c"
+#include "main.c"
