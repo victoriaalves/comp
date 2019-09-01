@@ -1579,8 +1579,9 @@ yyreturn:
 #line 57 "parser.y"
 
 
-int yyerror(char *msg){
+int yyerror(const char *msg){
   fprintf(stderr, "Deu error de sintaxe!\n");
+  printf("Linha %d [erro de sintaxe]: %s.\n", getLineNumber(), msg);
   exit(3);
 }
 
