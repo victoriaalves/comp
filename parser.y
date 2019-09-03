@@ -25,8 +25,8 @@
 %token OPERATOR_DIF
 
 %token TK_IDENTIFIER
-%token LIT_INTEGER
 
+%token LIT_INTEGER
 %token LIT_FLOAT
 %token LIT_TRUE
 %token LIT_FALSE
@@ -36,24 +36,31 @@
 %%
 
 programa: programa decl
-          |
-          ;
+  |
+  ;
 
 decl: vardec | fundec
   ;
 
-vardec: KW_INT TK_IDENTIFIER ';' LIT_INTEGER
+vardec: KW_INT TK_IDENTIFIER '=' init ';'
   ;
 
-fundec: KW_INT TK_IDENTIFIER '('  ')' body
+init: LIT_INTEGER
   ;
 
-body: cmd body
+fundec: KW_INT TK_IDENTIFIER '('  ')' cmd
+  ;
+
+cmd: TK_IDENTIFIER '=' LIT_FLOAT
+  | block
+  ;
+
+block: '{' lcmd '}'
+  ;
+
+lcmd: lcmd cmd ';'
   |
   ;
-cmd: TK_IDENTIFIER '=' LIT_FLOAT
-  ;
-
 %%
 
 int yyerror(const char *msg){
