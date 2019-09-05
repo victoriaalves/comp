@@ -48,7 +48,18 @@ vardec: KW_INT TK_IDENTIFIER '=' init ';'
 init: LIT_INTEGER
   ;
 
-fundec: KW_INT TK_IDENTIFIER '('  ')' cmd
+fundec: KW_INT TK_IDENTIFIER '(' parlist ')' cmd
+  ;
+
+parlist: par resto
+  |
+  ;
+
+resto: ',' par resto
+  |
+  ;
+
+par: KW_INT
   ;
 
 cmd: TK_IDENTIFIER '=' LIT_FLOAT
