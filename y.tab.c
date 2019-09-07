@@ -129,6 +129,14 @@
   #include <stdio.h>
   #include <stdlib.h>
 
+  #define SYMBOL_LIT_INT              1
+  #define SYMBOL_LIT_REAL             2
+  #define SYMBOL_LIT_TRUE             3
+  #define SYMBOL_LIT_FALSE            4
+  #define SYMBOL_LIT_CHAR             5
+  #define SYMBOL_LIT_STRING           6
+  #define SYMBOL_IDENTIFIER           7
+
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -161,7 +169,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 165 "y.tab.c"
+#line 173 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -452,9 +460,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    38,    38,    39,    42,    42,    45,    48,    51,    54,
-      55,    58,    59,    62,    65,    68,    69,    70,    73,    76,
-      77
+       0,    46,    46,    47,    50,    50,    53,    56,    59,    62,
+      63,    66,    67,    70,    73,    76,    77,    78,    81,    84,
+      85
 };
 #endif
 
@@ -1380,7 +1388,7 @@ yyreduce:
     {
       
 /* Line 1267 of yacc.c.  */
-#line 1384 "y.tab.c"
+#line 1392 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1594,7 +1602,7 @@ yyreturn:
 }
 
 
-#line 80 "parser.y"
+#line 88 "parser.y"
 
 
 int yyerror(const char *msg){
