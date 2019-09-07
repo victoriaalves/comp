@@ -62,16 +62,21 @@ resto: ',' par resto
 par: KW_INT
   ;
 
-cmd: TK_IDENTIFIER '=' LIT_FLOAT
-  | block
-  ;
-
 block: '{' lcmd '}'
   ;
 
-lcmd: lcmd cmd ';'
+cmd: TK_IDENTIFIER '=' LIT_FLOAT
+  | block
   |
   ;
+
+lcmd: cmd cmdrest
+  ;
+
+cmdrest: ';' cmd cmdrest
+  |
+  ;
+
 %%
 
 int yyerror(const char *msg){
