@@ -1,15 +1,10 @@
-etapa1: lex.yy.o main.o
-	gcc -o etapa1 lex.yy.o main.o
-
-main.o: main.c
-	gcc -c main.c
-
-lex.yy.o: lex.yy.c
-	gcc -c lex.yy.c
-
+etapa2: lex.yy.c y.tab.c y.tab.h
+	gcc -o etapa2 lex.yy.c
 lex.yy.c: scanner.l
-	flex --header-file=lex.yy.h scanner.l
+	lex scanner.l
+y.tab.c:
+y.tab.h:
+	yacc parser.y -d
 
 clean:
-	rm *.o lex.yy.c etapa1
-
+	rm lex.yy.c y.tab.c y.tab.h etapa2
