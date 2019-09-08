@@ -41,8 +41,9 @@ int main ()
     }
   else
     print "OK!\n";
+  }
 
 int incn ( int x, int n )
   {
-  return x+n
+  return x+n;
   }
