@@ -6,9 +6,6 @@
 int lineNumber = 1;
 int running = 1;
 
-char buf[1000];
-char *c;
-
 %}
 
 %x COMMENT
@@ -42,33 +39,24 @@ char *c;
 
 [,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
 
-[A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
-[0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
-[0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
-[0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
-'.'                           {hashInsert(yytext); return LIT_CHAR;}
-"\""                          {BEGIN(STRING); c = buf; *c++ = *yytext; return LIT_STRING;}
-
-
 [ \t]
 "\n" 													++lineNumber;
 "//".*
-"###"													BEGIN(COMMENT);
 
+"###"													BEGIN(COMMENT);
 <COMMENT>"###"								BEGIN(INITIAL);
 <COMMENT>"\n"									++lineNumber;
 <COMMENT>.
 
-<STRING>"\""            			{*c++ = *yytext; *c = 0; hashInsert(buf); BEGIN(INITIAL);}
-<STRING>\\n             			{*c++ = '\\'; *c++ = 'n';}
-<STRING>\\t             			{*c++ = '\\'; *c++ = 't'; }
-<STRING>\\\"             			{*c++ = '\\'; *c++ = '"'; }
-<STRING>.               			{*c++ = *yytext;}
-<STRING>\t               			{*c++ = '\t';}
-<STRING>\n              			{++lineNumber; *c++ = '\n';}
+[A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
+[0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
+[0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
+[0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
+
+\'([^'\\\n]?|\\.)\'           {hashInsert(yytext); return LIT_CHAR;}
+\"([^\"\\\n]|\\.)*\"          {hashInsert(yytext); return LIT_STRING;}
 
 %%
-
 
 int getLineNumber(void){
   return lineNumber;
