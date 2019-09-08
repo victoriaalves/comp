@@ -121,6 +121,7 @@ cmd: cmdSimples
   ;
 
 lcmd: cmd cmdresto
+  |
   ;
 
 cmdresto: ';' cmd cmdresto
@@ -160,7 +161,7 @@ exp: TK_IDENTIFIER
 
 %%
 
-int yyerror(const char *msg){
+int yyerror(char *msg){
   fprintf(stderr, "Deu error de sintaxe!\n");
   printf("Linha %d [erro de sintaxe]: %s.\n", getLineNumber(), msg);
   exit(3);
