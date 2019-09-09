@@ -36,10 +36,10 @@ int running = 1;
 "TRUE"												return LIT_TRUE;
 "FALSE"												return LIT_FALSE;
 
-[,;:\(\)[\]{\}+\-*/<>=v.~&$#]	return yytext[0];
+[v\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#]	return yytext[0];
 
-[ \t]
 "\n" 													++lineNumber;
+[ \t]
 "//".*
 
 "###"													BEGIN(COMMENT);
@@ -52,7 +52,7 @@ int running = 1;
 [0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
 [0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
 
-'.'                           {hashInsert(yytext); return LIT_CHAR;}
+\'([^'\\\n]?|\\.)\'           {hashInsert(yytext); return LIT_CHAR;}
 \"([^\"\\\n]|\\.)*\"          {hashInsert(yytext); return LIT_STRING;}
 
 %%
