@@ -10,6 +10,9 @@ extern int yylex();
 extern int isRunning();
 extern int getLineNumber();
 
+extern int yyparse();
+extern int yyerror();
+
 int main(int argc, char **argv)
 {
   int tok, ans;

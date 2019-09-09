@@ -77,7 +77,7 @@ listaLit: init listaLit
   |
   ;
 
-fundec: tipo TK_IDENTIFIER '(' parLista ')' cmd
+fundec: tipo TK_IDENTIFIER '(' parLista ')' block 
   ;
 
 par: tipo TK_IDENTIFIER
@@ -115,8 +115,8 @@ fluxo: KW_IF '(' exp ')' KW_THEN cmd KW_ELSE cmd
   ;
 
 cmd: cmdSimples
-  | block
   | fluxo
+  | block
   |
   ;
 
