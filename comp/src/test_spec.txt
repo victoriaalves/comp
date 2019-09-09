@@ -40,10 +40,10 @@ int main ()
     break;
     }
   else
-    print "OK!\n";
+    print "OK!\n"
   }
 
 int incn ( int x, int n )
   {
-  return x+n;
+  return x+n
   }

@@ -121,11 +121,10 @@ cmd: cmdSimples
   ;
 
 lcmd: cmd cmdresto
-  |
   ;
 
 cmdresto: ';' cmd cmdresto
-  | ';'
+  |
   ;
 
 operand: '+'
