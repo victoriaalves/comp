@@ -9,7 +9,6 @@ int running = 1;
 %}
 
 %x COMMENT
-%x STRING
 
 %%
 
@@ -53,7 +52,7 @@ int running = 1;
 [0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
 [0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
 
-\'([^'\\\n]?|\\.)\'           {hashInsert(yytext); return LIT_CHAR;}
+'.'                           {hashInsert(yytext); return LIT_CHAR;}
 \"([^\"\\\n]|\\.)*\"          {hashInsert(yytext); return LIT_STRING;}
 
 %%
