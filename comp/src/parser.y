@@ -106,7 +106,7 @@ printLista: LIT_STRING printLista
   ;
 
 cmdSimples: TK_IDENTIFIER '=' exp
-  | TK_IDENTIFIER '[' exp ']' '=' listaLit
+  | TK_IDENTIFIER '[' exp ']' '=' exp 
   | KW_READ TK_IDENTIFIER
   | KW_READ init
   | KW_PRINT printLista
@@ -133,21 +133,6 @@ cmdresto: ';' cmd cmdresto
   |
   ;
 
-operand: '+'
-  | '-'
-  | '*'
-  | '/'
-  | '>'
-  | '<'
-  | 'v'
-  | '.'
-  | '~'
-  | OPERATOR_LE
-  | OPERATOR_GE
-  | OPERATOR_EQ
-  | OPERATOR_DIF
-  ;
-
 expParam: exp expParamResto
   ;
 
@@ -156,12 +141,27 @@ expParamResto: ',' expParam
   ;
 
 exp: TK_IDENTIFIER
-  | initWithBool
+  | LIT_INTEGER
+  | LIT_TRUE
+  | LIT_FALSE
+  | LIT_FLOAT
+  | LIT_CHAR
   | '(' exp ')'
   | TK_IDENTIFIER '[' exp ']'
   | TK_IDENTIFIER '(' expParam ')'
-  | exp operand exp
-  |
+  | exp '+' exp
+  | exp '-' exp
+  | exp '*' exp
+  | exp '/' exp
+  | exp '>' exp
+  | exp '<' exp
+  | exp 'v' exp
+  | exp '.' exp
+  | exp '~' exp 
+  | exp  OPERATOR_LE exp
+  | exp  OPERATOR_GE exp
+  | exp  OPERATOR_EQ exp
+  | exp  OPERATOR_DIF exp
   ;
 
 %%
