@@ -58,14 +58,20 @@ tipo: KW_BOOL
   | KW_FLOAT
   ;
 
-init: LIT_INTEGER
+initWithBool: LIT_INTEGER
   | LIT_TRUE
   | LIT_FALSE
   | LIT_FLOAT
   | LIT_CHAR
   ;
 
-global: tipo TK_IDENTIFIER '=' init ';'
+init: LIT_INTEGER
+  | LIT_FLOAT
+  | LIT_CHAR
+  ;
+
+
+global: tipo TK_IDENTIFIER '=' initWithBool ';'
   | tipo TK_IDENTIFIER '[' LIT_INTEGER ']' arrayInit ';'
   ;
 
@@ -77,7 +83,7 @@ listaLit: init listaLit
   |
   ;
 
-fundec: tipo TK_IDENTIFIER '(' parLista ')' block 
+fundec: tipo TK_IDENTIFIER '(' parLista ')' block
   ;
 
 par: tipo TK_IDENTIFIER
@@ -150,7 +156,7 @@ expParamResto: ',' expParam
   ;
 
 exp: TK_IDENTIFIER
-  | init
+  | initWithBool
   | '(' exp ')'
   | TK_IDENTIFIER '[' exp ']'
   | TK_IDENTIFIER '(' expParam ')'
