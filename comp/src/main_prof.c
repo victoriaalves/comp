@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 
   if (argc < 3)
     {
-    printf("call: ./etapa1 input.txt output.txt \n");
+    printf("call: ./etapa2 input.txt output.txt \n");
     exit(1);
     }
   if (0==(yyin = fopen(argv[1],"r")))
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
   while (isRunning())
     {
     token = yylex();
-    
+
     if (!isRunning())
       break;
     fscanf(gold,"%d",&answar);
@@ -51,6 +51,6 @@ int main(int argc, char** argv)
       fprintf(stderr,"%d=ERROR(%s,%d,%d) \n",i,yytext,token,answar );
     ++i;
     }
-  printf("NOTA %d\n\n",nota);  
-  fprintf(stderr,"NOTA %d\n\n",nota);  
+  printf("NOTA %d\n\n",nota);
+  fprintf(stderr,"NOTA %d\n\n",nota);
   }
