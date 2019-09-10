@@ -19,20 +19,14 @@ int main(int argc, char **argv)
   FILE *out = NULL;
 
 
-  if (argc < 3) {
-    printf("Execute: ./etapa2 input.txt output.txt\n");
+  if (argc < 2) {
+    printf("Execute: ./etapa2 input.txt\n");
     exit(1);
   }
 
   yyin = fopen(argv[1], "r");
   if (yyin == NULL) {
     printf("Could not open file %s.\n", argv[1]);
-    exit(1);
-  }
-
-  out = fopen(argv[2], "r");
-  if (out == NULL) {
-    printf("Could not open file %s.\n", argv[2]);
     exit(1);
   }
 
