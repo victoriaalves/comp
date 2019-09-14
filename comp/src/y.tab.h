@@ -97,7 +97,15 @@
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+#line 21 "parser.y"
+{
+  HASH_NODE *symbol;
+  AST *ast;
+}
+/* Line 1529 of yacc.c.  */
+#line 108 "y.tab.h"
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1

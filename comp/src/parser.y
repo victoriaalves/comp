@@ -1,6 +1,9 @@
 %{
   #include <stdio.h>
   #include <stdlib.h>
+  #include "lex.yy.h"
+  #include "hash.h"
+  #include "astree.h"
 
   #define SYMBOL_LIT_INT              1
   #define SYMBOL_LIT_REAL             2
@@ -9,7 +12,16 @@
   #define SYMBOL_LIT_CHAR             5
   #define SYMBOL_LIT_STRING           6
   #define SYMBOL_IDENTIFIER           7
+
+  int getLineNumber(void);
+  int yyerror(char*);
 %}
+
+%union
+{
+  HASH_NODE *symbol;
+  AST *ast;
+}
 
 %token KW_BYTE
 %token KW_INT
@@ -34,12 +46,14 @@
 
 %token TK_IDENTIFIER
 
-%token LIT_INTEGER
-%token LIT_FLOAT
+%token<symbol> LIT_INTEGER
+%token<symbol> LIT_FLOAT
 %token LIT_TRUE
 %token LIT_FALSE
 %token LIT_CHAR
 %token LIT_STRING
+
+%type<symbol> exp
 
 %%
 
@@ -106,7 +120,7 @@ printLista: LIT_STRING printLista
   ;
 
 cmdSimples: TK_IDENTIFIER '=' exp
-  | TK_IDENTIFIER '[' exp ']' '=' exp 
+  | TK_IDENTIFIER '[' exp ']' '=' exp
   | KW_READ TK_IDENTIFIER
   | KW_READ init
   | KW_PRINT printLista
@@ -141,10 +155,10 @@ expParamResto: ',' expParam
   ;
 
 exp: TK_IDENTIFIER
-  | LIT_INTEGER
+  | LIT_INTEGER {fprintf(stderr, "Id=%s\n", $1->text);}
   | LIT_TRUE
   | LIT_FALSE
-  | LIT_FLOAT
+  | LIT_FLOAT {fprintf(stderr, "Id=%s\n", $1->text);}
   | LIT_CHAR
   | '(' exp ')'
   | TK_IDENTIFIER '[' exp ']'
@@ -157,7 +171,7 @@ exp: TK_IDENTIFIER
   | exp '<' exp
   | exp 'v' exp
   | exp '.' exp
-  | exp '~' exp 
+  | exp '~' exp
   | exp  OPERATOR_LE exp
   | exp  OPERATOR_GE exp
   | exp  OPERATOR_EQ exp

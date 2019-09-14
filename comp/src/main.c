@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "hash.h"
 
 // Necessário declarar como extern as funções do scanner,
 // que são compiladas em lex.yy.c

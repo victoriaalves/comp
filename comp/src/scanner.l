@@ -1,6 +1,7 @@
 %{
 
-#include "hash.c"
+#include "astree.h"
+#include "hash.h"
 #include "y.tab.h"
 
 int lineNumber = 1;
@@ -48,7 +49,7 @@ int running = 1;
 <COMMENT>.
 
 [A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
-[0-9]+ 												{hashInsert(yytext); return LIT_INTEGER;}
+[0-9]+ 												{yylval.symbol = hashInsert(yytext); return LIT_INTEGER;}
 [0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
 [0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
 
@@ -78,4 +79,3 @@ void initMe(void){
 }
 
 #include "y.tab.c"
-#include "main.c"
