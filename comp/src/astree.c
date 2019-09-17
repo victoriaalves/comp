@@ -14,6 +14,13 @@ AST *astreeCreate(int type, AST *s0, AST *s1, AST *s2, AST *s3){
 
 void astreePrint(AST *node, int level){
     if(!node) return;
+
+    int i;
+    for(i = 0; i < level; i++)
+        fprintf(stderr, "  ");
+
+    fprintf(stderr, "AST( ");
+
     switch(node->type){
         case AST_SYMBOL:
             fprintf(stderr, "AST_SYMBOL");
