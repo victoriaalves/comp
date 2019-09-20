@@ -120,7 +120,7 @@ printLista: LIT_STRING printLista
   |
   ;
 
-cmdSimples: TK_IDENTIFIER '=' exp {astreePrint($3, 0);}
+cmdSimples: TK_IDENTIFIER '=' exp        {astreePrint($3, 0);}
   | TK_IDENTIFIER '[' exp ']' '=' exp
   | KW_READ TK_IDENTIFIER
   | KW_READ init
@@ -155,18 +155,18 @@ expParamResto: ',' expParam
   |
   ;
 
-exp: TK_IDENTIFIER {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
-  | LIT_INTEGER {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
+exp: TK_IDENTIFIER                    {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
+  | LIT_INTEGER                       {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
   | LIT_TRUE
   | LIT_FALSE
-  | LIT_FLOAT {$$=0;}
+  | LIT_FLOAT                         {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
   | LIT_CHAR
   | '(' exp ')'
   | TK_IDENTIFIER '[' exp ']'
   | TK_IDENTIFIER '(' expParam ')'
-  | exp '+' exp {$$=astreeCreate(AST_ADD, 0, $1, $3, 0, 0);}
+  | exp '+' exp                       {$$=astreeCreate(AST_ADD, 0, $1, $3, 0, 0);}
   | exp '-' exp
-  | exp '*' exp {$$=astreeCreate(AST_MUL, 0, $1, $3, 0, 0);}
+  | exp '*' exp                       {$$=astreeCreate(AST_MUL, 0, $1, $3, 0, 0);}
   | exp '/' exp
   | exp '>' exp
   | exp '<' exp
