@@ -132,6 +132,10 @@
   #include "hash.h"
   #include "astree.h"
 
+  int yylex();
+	int yyerror(char *message);
+	extern int getLineNumber();
+
   #define SYMBOL_LIT_INT              1
   #define SYMBOL_LIT_REAL             2
   #define SYMBOL_LIT_TRUE             3
@@ -139,9 +143,6 @@
   #define SYMBOL_LIT_CHAR             5
   #define SYMBOL_LIT_STRING           6
   #define SYMBOL_IDENTIFIER           7
-
-  int getLineNumber(void);
-  int yyerror(char*);
 
 
 /* Enabling traces.  */
@@ -164,13 +165,13 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 21 "parser.y"
+#line 22 "parser.y"
 {
   HASH_NODE *symbol;
   AST *ast;
 }
 /* Line 193 of yacc.c.  */
-#line 174 "y.tab.c"
+#line 175 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -183,7 +184,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 187 "y.tab.c"
+#line 188 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -498,14 +499,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    61,    64,    65,    68,    69,    70,    71,
-      72,    75,    76,    77,    78,    79,    82,    83,    84,    88,
-      89,    92,    93,    96,    97,   100,   103,   106,   107,   110,
-     111,   114,   117,   118,   119,   122,   123,   124,   125,   126,
-     127,   130,   131,   132,   133,   134,   137,   138,   139,   140,
-     143,   146,   147,   150,   153,   154,   157,   158,   159,   160,
-     161,   162,   163,   164,   165,   166,   167,   168,   169,   170,
-     171,   172,   173,   174,   175,   176,   177,   178
+       0,    61,    61,    62,    65,    66,    69,    70,    71,    72,
+      73,    76,    77,    78,    79,    80,    83,    84,    85,    89,
+      90,    93,    94,    97,    98,   101,   104,   107,   108,   111,
+     112,   115,   118,   119,   120,   123,   124,   125,   126,   127,
+     128,   131,   132,   133,   134,   135,   138,   139,   140,   141,
+     144,   147,   148,   151,   154,   155,   158,   159,   160,   161,
+     162,   163,   164,   165,   166,   167,   168,   169,   170,   171,
+     172,   173,   174,   175,   176,   177,   178,   179
 };
 #endif
 
@@ -1534,19 +1535,39 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 57:
+        case 35:
+#line 123 "parser.y"
+    {astreePrint((yyvsp[(3) - (3)].ast), 0);}
+    break;
+
+  case 56:
 #line 158 "parser.y"
-    {fprintf(stderr, "Id=%s\n", (yyvsp[(1) - (1)].symbol)->text);}
+    {(yyval.ast)=astreeCreate(AST_SYMBOL, (yyvsp[(1) - (1)].symbol), 0, 0, 0, 0);}
+    break;
+
+  case 57:
+#line 159 "parser.y"
+    {(yyval.ast)=astreeCreate(AST_SYMBOL, (yyvsp[(1) - (1)].symbol), 0, 0, 0, 0);}
     break;
 
   case 60:
-#line 161 "parser.y"
-    {fprintf(stderr, "Id=%s\n", (yyvsp[(1) - (1)].symbol)->text);}
+#line 162 "parser.y"
+    {(yyval.ast)=0;}
+    break;
+
+  case 65:
+#line 167 "parser.y"
+    {(yyval.ast)=astreeCreate(AST_ADD, 0, (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast), 0, 0);}
+    break;
+
+  case 67:
+#line 169 "parser.y"
+    {(yyval.ast)=astreeCreate(AST_MUL, 0, (yyvsp[(1) - (3)].ast), (yyvsp[(3) - (3)].ast), 0, 0);}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1550 "y.tab.c"
+#line 1571 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1760,7 +1781,7 @@ yyreturn:
 }
 
 
-#line 181 "parser.y"
+#line 182 "parser.y"
 
 
 int yyerror(char *msg){

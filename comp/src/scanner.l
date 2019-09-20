@@ -48,13 +48,13 @@ int running = 1;
 <COMMENT>"\n"									++lineNumber;
 <COMMENT>.
 
-[A-Za-z_][A-Za-z_0-9]*				{hashInsert(yytext); return TK_IDENTIFIER;}
+[A-Za-z_][A-Za-z_0-9]*				{yylval.symbol = hashInsert(yytext); return TK_IDENTIFIER;}
 [0-9]+ 												{yylval.symbol = hashInsert(yytext); return LIT_INTEGER;}
-[0-9]*\.[0-9]+ 								{hashInsert(yytext); return LIT_FLOAT;}
-[0-9]+\.[0-9]* 								{hashInsert(yytext); return LIT_FLOAT;}
+[0-9]*\.[0-9]+ 								{yylval.symbol = hashInsert(yytext); return LIT_FLOAT; }
+[0-9]+\.[0-9]* 								{yylval.symbol = hashInsert(yytext); return LIT_FLOAT; }
 
-\'([^'\\\n]?|\\.)\'           {hashInsert(yytext); return LIT_CHAR;}
-\"([^\"\\\n]|\\.)*\"          {hashInsert(yytext); return LIT_STRING;}
+\'([^'\\\n]?|\\.)\'           {yylval.symbol = hashInsert(yytext); return LIT_CHAR;}
+\"([^\"\\\n]|\\.)*\"          {yylval.symbol = hashInsert(yytext); return LIT_STRING;}
 
 %%
 

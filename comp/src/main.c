@@ -16,10 +16,6 @@ extern int yyerror();
 
 int main(int argc, char **argv)
 {
-  int tok, ans;
-  FILE *out = NULL;
-
-
   if (argc < 2) {
     printf("Execute: ./etapa2 input.txt\n");
     exit(1);

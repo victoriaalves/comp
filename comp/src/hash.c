@@ -14,7 +14,6 @@ void hashInit(void)
 int hashAdress(char *text)
 {
 	int adress = 1;
-	int i;
 	for(int i=0; i<strlen(text); i++)
 		adress = (adress * text[i]) % HASH_SIZE + 1;
 	return adress-1;
@@ -41,7 +40,6 @@ HASH_NODE *hashInsert(char *text)
 
 void hashPrint(void)
 {
-	int i;
 	HASH_NODE *node;
 	for(int i=0; i<HASH_SIZE; i++)
 		for(node=Table[i]; node; node = node->next)
