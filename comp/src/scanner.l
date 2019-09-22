@@ -78,4 +78,9 @@ void initMe(void){
   hashInit();
 }
 
+// FILE* file(char* filename){
+//     yyin = fopen(filename,"r");
+//     return yyin;
+// }
+
 #include "y.tab.c"

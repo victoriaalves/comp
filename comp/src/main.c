@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "hash.h"
+#include "astree.h"
 
 // Necessário declarar como extern as funções do scanner,
 // que são compiladas em lex.yy.c
@@ -10,14 +11,17 @@ extern void initMe();
 extern int yylex();
 extern int isRunning();
 extern int getLineNumber();
+//extern AST * getAST();
 
 extern int yyparse();
 extern int yyerror();
 
 int main(int argc, char **argv)
 {
+  //FILE *out;
+
   if (argc < 2) { // < 3
-    printf("Execute: ./etapa2 input.txt\n"); //printf("Execute: ./etapa2 input.txt output.txt\n");
+    printf("Execute: ./etapa2 input.txt\n"); //printf("Execute: ./etapa2 input.txt  output.txt\\n");
     exit(1);
   }
 
@@ -37,7 +41,13 @@ int main(int argc, char **argv)
   yyparse();
   //hashPrint();
 
-  fprintf(stderr, "Terrific! Go on!\n");
+  fprintf(stderr, "Compiled Successfully.\n");
+
+	//fprintf(stderr, "Uncompiling!\n");
+
+  //uncompileAST(getAST(), out);
+
+  //fclose(out);
 
   exit(0);
 }

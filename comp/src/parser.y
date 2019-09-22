@@ -49,7 +49,7 @@
 %token<symbol> LIT_STRING
 
 %type<ast> exp
-%type<ast> programa 
+%type<ast> programa
 %type<ast> decl
 %type<ast> fundec
 %type<ast> global
@@ -70,7 +70,7 @@
 %type<ast> cmdresto
 %type<ast> expParam
 %type<ast> expParamResto
-%type<ast> ldecl 
+%type<ast> ldecl
 
 %start programa
 
@@ -83,7 +83,7 @@ ldecl: decl ldecl                                               {$$=astreeCreate
   |                                                             {$$=0;}
   ;
 
-decl: fundec                        
+decl: fundec
   | global
   ;
 
@@ -111,16 +111,15 @@ global: tipo TK_IDENTIFIER '=' initWithBool ';'                 {$$=astreeCreate
   | tipo TK_IDENTIFIER '[' LIT_INTEGER ']' arrayInit ';'        {$$=astreeCreate(AST_VEC, $2, $1, astreeCreate(AST_SYMBOL, $4, 0, 0, 0, 0), $6, 0);}
   ;
 
-arrayInit: ':' init listaLit                                    {$$=astreeCreate(AST_LIT, 0, $2, $3, 0, 0);} 
+arrayInit: ':' init listaLit                                    {$$=astreeCreate(AST_LIT, 0, $2, $3, 0, 0);}
   |                                                             {$$=0;}
   ;
 
 listaLit: init listaLit                                         {$$=astreeCreate(AST_LLIT, 0, $1, $2, 0, 0);}
   |                                                             {$$=0;}
-  ;   
+  ;
 
 fundec: tipo TK_IDENTIFIER '(' parLista ')' block               {$$=astreeCreate(AST_FUNC, $2, $1, $4, $6, 0);}
-
   ;
 
 par: tipo TK_IDENTIFIER                                         {$$=astreeCreate(AST_PARAM, $2, 0, 0, 0, 0);}
@@ -130,11 +129,11 @@ parLista: par resto                                             {$$=astreeCreate
   |                                                             {$$=0;}
   ;
 
-resto: ',' parLista                                             {$$=astreeCreate(AST_RESTO, 0, $2, 0, 0, 0);} 
+resto: ',' parLista                                             {$$=astreeCreate(AST_RESTO, 0, $2, 0, 0, 0);}
   |                                                             {$$=0;}
   ;
 
-block: '{' lcmd '}'                                             {$$=astreeCreate(AST_BLOCK, 0, $2, 0, 0, 0);}   
+block: '{' lcmd '}'                                             {$$=astreeCreate(AST_BLOCK, 0, $2, 0, 0, 0);}
   ;
 
 printLista: LIT_STRING printLista                               {$$=astreeCreate(AST_LPRINT, 0, astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0), $2, 0, 0);}
@@ -153,8 +152,8 @@ cmdSimples: TK_IDENTIFIER '=' exp                               {$$=astreeCreate
 fluxo: KW_IF '(' exp ')' KW_THEN cmd KW_ELSE cmd                {$$=astreeCreate(AST_IFELSE, 0, $3, $6, $8, 0);}
   | KW_IF '(' exp ')' KW_THEN cmd                               {$$=astreeCreate(AST_IF, 0, $3, $6, 0, 0);}
   | KW_WHILE '(' exp ')' cmd                                    {$$=astreeCreate(AST_WHILE, 0, $3, $5, 0, 0);}
-  | KW_FOR '(' TK_IDENTIFIER ':' exp ',' exp ',' exp ')' cmd    {$$=astreeCreate(AST_FOR, $3, $5, $7, $9, $11);}
-  | KW_BREAK                                                    {$$=astreeCreate(AST_BREAK, 0, 0, 0, 0, 0);} 
+  | KW_FOR '(' TK_IDENTIFIER '=' exp ',' exp ',' exp ')' cmd    {$$=astreeCreate(AST_FOR, $3, $5, $7, $9, $11);}
+  | KW_BREAK                                                    {$$=astreeCreate(AST_BREAK, 0, 0, 0, 0, 0);}
   ;
 
 cmd: cmdSimples                                                 {$$=astreeCreate(AST_CMDS, 0, $1, 0, 0, 0);}
@@ -165,17 +164,17 @@ cmd: cmdSimples                                                 {$$=astreeCreate
 
 lcmd: cmd cmdresto                                              {$$=astreeCreate(AST_LCMD, 0, $1, $2, 0, 0);}
   ;
-  
+
 cmdresto: ';' cmd cmdresto                                      {$$=astreeCreate(AST_CRESTO, 0, $2, $3, 0, 0);}
   |                                                             {$$=0;}
-  ; 
+  ;
 
 expParam: exp expParamResto                                     {$$=astreeCreate(AST_LEXPPARAM, 0, $1, $2, 0, 0);}
   ;
 
 expParamResto: ',' expParam                                     {$$=astreeCreate(AST_EXPPARAM, 0, $2, 0, 0, 0);}
   |                                                             {$$=0;}
-  ; 
+  ;
 
 exp: TK_IDENTIFIER                                              {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
   | LIT_INTEGER                                                 {$$=astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0);}
@@ -207,4 +206,8 @@ int yyerror(char *msg){
   fprintf(stderr, "Deu error de sintaxe!\n");
   printf("Linha %d [erro de sintaxe]: %s.\n", getLineNumber(), msg);
   exit(3);
+}
+
+AST* getAST(){
+	return root;
 }

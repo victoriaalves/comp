@@ -10,7 +10,7 @@
 #define AST_MUL 3
 #define AST_BOOL 4
 #define AST_BYTE 5
-#define AST_INT 6 
+#define AST_INT 6
 #define AST_LONG 7
 #define AST_FLOAT 8
 #define AST_FUNC 9
@@ -68,6 +68,6 @@ typedef struct astree_node{
 
 AST *astreeCreate(int type, HASH_NODE *symbol, AST *s0, AST *s1, AST *s2, AST *s3);
 void astreePrint(AST *node, int level);
-void nodePrint(AST *node);
+void uncompileAST(AST *root, FILE *file);
 
 #endif
