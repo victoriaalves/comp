@@ -66,13 +66,16 @@ void astreePrint(AST *node, int level){
         case AST_SUB: fprintf(stderr, "AST_SUB, \n"); break;
         case AST_GREATER: fprintf(stderr, "AST_GREATER \n"); break;
         case AST_SMALLER: fprintf(stderr, "AST_SMALLER, \n"); break;
-        case AST_OF: fprintf(stderr, "AST_OF, \n"); break;
+        case AST_OR: fprintf(stderr, "AST_OR, \n"); break;
         case AST_AND: fprintf(stderr, "AST_AND, \n"); break;
         case AST_NOT: fprintf(stderr, "AST_NOT, \n"); break;
         case AST_LE: fprintf(stderr, "AST_LE, \n"); break;
         case AST_GE: fprintf(stderr, "AST_GE, \n"); break;
         case AST_EQ: fprintf(stderr, "AST_EQ, \n"); break;
         case AST_DIF: fprintf(stderr, "AST_DIF, \n"); break;
+        case AST_EXPPRINT: fprintf(stderr, "AST_EXPPRINT, \n"); break;
+        case AST_RESTO: fprintf(stderr, "AST_EXPPRINT, \n"); break;
+        case AST_LDECL: fprintf(stderr, "AST_LDECL, \n"); break;
         default: break;
     }
 

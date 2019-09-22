@@ -54,6 +54,9 @@
 #define AST_GE 47
 #define AST_EQ 48
 #define AST_DIF 49
+#define AST_EXPPRINT 50
+#define AST_RESTO 51
+#define AST_LDECL 52
 
 #define MAX_SONS 4
 
