@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 
   initMe();
   yyparse();
-  hashPrint();
+  //hashPrint();
 
   fprintf(stderr, "Terrific! Go on!\n");
 
