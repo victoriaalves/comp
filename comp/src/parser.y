@@ -64,7 +64,7 @@ programa: programa decl               {root=$$;astreePrint(root, 0);}
   |                                   {$$=0;}
   ;
 
-decl: fundec                         
+decl: fundec
   | global
   ;
 
@@ -92,7 +92,7 @@ global: tipo TK_IDENTIFIER '=' initWithBool ';'              {$$=astreeCreate(AS
   | tipo TK_IDENTIFIER '[' LIT_INTEGER ']' arrayInit ';'     {$$=astreeCreate(AST_VEC, $2, $1, $4, $6, 0);}
   ;
 
-arrayInit: ':' init listaLit                                 {$$=astreeCreate(AST_LIT, 0, $2, $3, 0, 0);} 
+arrayInit: ':' init listaLit                                 {$$=astreeCreate(AST_LIT, 0, $2, $3, 0, 0);}
   |                                                          {$$=0;}
   ;
 
@@ -111,11 +111,11 @@ parLista: par resto                                          {$$=astreeCreate(AS
   |                                                          {$$=0;}
   ;
 
-resto: ',' parLista                   
+resto: ',' parLista
   |                                                          {$$=0;}
   ;
 
-block: '{' lcmd '}'                                          {$$=astreeCreate(AST_BLOCK, 0, $2, 0, 0, 0);}   
+block: '{' lcmd '}'                                          {$$=astreeCreate(AST_BLOCK, 0, $2, 0, 0, 0);}
   ;
 
 printLista: LIT_STRING printLista                            {$$=astreeCreate(AST_LPRINT, 0, $1, $2, 0, 0);}
@@ -135,7 +135,7 @@ fluxo: KW_IF '(' exp ')' KW_THEN cmd KW_ELSE cmd                {$$=astreeCreate
   | KW_IF '(' exp ')' KW_THEN cmd                               {$$=astreeCreate(AST_IF, 0, $3, $6, 0, 0);}
   | KW_WHILE '(' exp ')' cmd                                    {$$=astreeCreate(AST_WHILE, 0, $3, $5, 0, 0);}
   | KW_FOR '(' TK_IDENTIFIER ':' exp ',' exp ',' exp ')' cmd    {$$=astreeCreate(AST_FOR, $3, $5, $7, $9, $11);}
-  | KW_BREAK                                                    {$$=astreeCreate(AST_BREAK, 0, 0, 0, 0, 0); 
+  | KW_BREAK                                                    {$$=astreeCreate(AST_BREAK, 0, 0, 0, 0, 0);
   ;
 
 cmd: cmdSimples                                              {$$=astreeCreate(AST_CMDS, 0, $1, 0, 0, 0);}
