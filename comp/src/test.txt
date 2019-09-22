@@ -1,11 +1,9 @@
-
-
 int x = 10;
-int y = 21;
 
 int func ( int a, int b )
 {
   x=y*10+2;
   o=8+11;
   o=8*11;
+  y=4/3;
 }

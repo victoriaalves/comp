@@ -16,8 +16,8 @@ extern int yyerror();
 
 int main(int argc, char **argv)
 {
-  if (argc < 2) {
-    printf("Execute: ./etapa2 input.txt\n");
+  if (argc < 2) { // < 3
+    printf("Execute: ./etapa2 input.txt\n"); //printf("Execute: ./etapa2 input.txt output.txt\n");
     exit(1);
   }
 
@@ -26,6 +26,12 @@ int main(int argc, char **argv)
     printf("Could not open file %s.\n", argv[1]);
     exit(1);
   }
+
+  // yyin = fopen(argv[2], "w+");
+  // if (yyin == NULL) {
+  //   printf("Could not open file %s.\n", argv[2]);
+  //   exit(1);
+  // }
 
   initMe();
   yyparse();
