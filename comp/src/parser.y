@@ -72,6 +72,10 @@
 %type<ast> expParamResto
 %type<ast> ldecl
 
+%left '<' '>' OPERATOR_LE OPERATOR_GE OPERATOR_EQ OPERATOR_DIF
+%left '+' '-'
+%left '*' '/'
+
 %start programa
 
 %%

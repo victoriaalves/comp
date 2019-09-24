@@ -1,9 +1,6 @@
 int x = 10;
 
-int func ( int a, int b )
+int func ( int a )
 {
-  x=y*10+2;
-  o=8+11;
-  o=8*11;
-  y=4/3;
+  a=8+11*a[2];
 }
