@@ -11,16 +11,16 @@ extern void initMe();
 extern int yylex();
 extern int isRunning();
 extern int getLineNumber();
-//extern AST * getAST();
+extern AST* getAST();
 
 extern int yyparse();
 extern int yyerror();
 
 int main(int argc, char **argv)
 {
-  //FILE *out;
+  FILE *out;
 
-  if (argc < 2) { // < 3
+  if (argc < 3) { // < 3
     printf("Execute: ./etapa2 input.txt\n"); //printf("Execute: ./etapa2 input.txt  output.txt\\n");
     exit(1);
   }
@@ -31,11 +31,11 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-  // yyin = fopen(argv[2], "w+");
-  // if (yyin == NULL) {
-  //   printf("Could not open file %s.\n", argv[2]);
-  //   exit(1);
-  // }
+  out = fopen(argv[2], "w+");
+  if (out == NULL) {
+    printf("Could not open file %s.\n", argv[2]);
+    exit(1);
+  }
 
   initMe();
   yyparse();
@@ -43,11 +43,11 @@ int main(int argc, char **argv)
 
   fprintf(stderr, "Compiled Successfully.\n");
 
-	//fprintf(stderr, "Uncompiling!\n");
+  fprintf(stderr, "Uncompiling!\n");
 
-  //uncompileAST(getAST(), out);
+  uncompileAST(getAST(), out);
 
-  //fclose(out);
+  fclose(out);
 
   exit(0);
 }
