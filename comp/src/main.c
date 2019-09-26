@@ -20,8 +20,8 @@ int main(int argc, char **argv)
 {
   FILE *out;
 
-  if (argc < 3) { // < 3
-    printf("Execute: ./etapa2 input.txt\n"); //printf("Execute: ./etapa2 input.txt  output.txt\\n");
+  if (argc < 3) {
+    printf("Execute: ./etapa3 input.txt output.txt\n");
     exit(1);
   }
 

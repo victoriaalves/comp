@@ -1653,7 +1653,7 @@ yyreduce:
 
   case 27:
 #line 129 "parser.y"
-    {(yyval.ast)=astreeCreate(AST_PARAM, (yyvsp[(2) - (2)].symbol), 0, 0, 0, 0);}
+    {(yyval.ast)=astreeCreate(AST_PARAM, (yyvsp[(2) - (2)].symbol), (yyvsp[(1) - (2)].ast), 0, 0, 0);}
     break;
 
   case 28:
