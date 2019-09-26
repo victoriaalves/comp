@@ -126,7 +126,7 @@ listaLit: init listaLit                                         {$$=astreeCreate
 fundec: tipo TK_IDENTIFIER '(' parLista ')' block               {$$=astreeCreate(AST_FUNC, $2, $1, $4, $6, 0);}
   ;
 
-par: tipo TK_IDENTIFIER                                         {$$=astreeCreate(AST_PARAM, $2, 0, 0, 0, 0);}
+par: tipo TK_IDENTIFIER                                         {$$=astreeCreate(AST_PARAM, $2, $1, 0, 0, 0);}
   ;
 
 parLista: par resto                                             {$$=astreeCreate(AST_LPARAM, 0, $1, $2, 0, 0);}
