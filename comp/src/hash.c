@@ -24,12 +24,12 @@ HASH_NODE *hashFind(char *text)
 	return 0;
 }
 
-HASH_NODE *hashInsert(char *text)
+HASH_NODE *hashInsert(char *text, int type)
 {
 	HASH_NODE *newnode;
 	int adress = hashAdress(text);
 	newnode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
-	newnode-> type = 1;
+	newnode-> type = type;
 	newnode-> text = (char*) calloc(strlen(text)+1, sizeof(char));
 	strcpy(newnode->text, text);
 	newnode-> next = Table[adress];
