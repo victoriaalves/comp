@@ -11,29 +11,38 @@ void hashInit(void)
 		Table[i]=0;
 }
 
-int hashAdress(char *text)
+int hashAddress(char *text)
 {
-	int adress = 1;
+	int address = 1;
 	for(int i=0; i<strlen(text); i++)
-		adress = (adress * text[i]) % HASH_SIZE + 1;
-	return adress-1;
+		address = (address * text[i]) % HASH_SIZE + 1;
+	return address-1;
 }
 
 HASH_NODE *hashFind(char *text)
 {
+	int address = hashAddress(text);
+	HASH_NODE* node;
+	for(node=Table[address]; node; node = node->next)
+		if(!strcmp(text,node->text))
+			return node;
+
 	return 0;
 }
 
 HASH_NODE *hashInsert(char *text, int type)
 {
 	HASH_NODE *newnode;
-	int adress = hashAdress(text);
+	if((newnode = hashFind(text))!=0)
+		return newnode;
+
+	int address = hashAddress(text);
 	newnode = (HASH_NODE*) calloc(1, sizeof(HASH_NODE));
 	newnode-> type = type;
 	newnode-> text = (char*) calloc(strlen(text)+1, sizeof(char));
 	strcpy(newnode->text, text);
-	newnode-> next = Table[adress];
-	Table[adress] = newnode;
+	newnode-> next = Table[address];
+	Table[address] = newnode;
 
 	return newnode;
 }

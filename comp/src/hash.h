@@ -29,7 +29,7 @@ typedef struct hash_node
 
 void hashInit(void);
 
-int hasAdress(char *text);
+int hashAddress(char *text);
 HASH_NODE *hashFind(char *text);
 HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
