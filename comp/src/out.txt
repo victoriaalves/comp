@@ -4,6 +4,6 @@ int k =  6667 ;
 int func(int a){
 a =  8  +  11  * a[ 2 ];
 };
-int funcdois(){
+int k(){
 k =  2 ;
 };

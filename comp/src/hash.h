@@ -15,6 +15,10 @@
 #define SYMBOL_FUNC 8
 #define SYMBOL_PARAM 9
 
+// #define SYMBOL_SCALAR
+// #define SYMBOL_VECTOR
+// #define SYMBOL_FUNCTION
+
 #define DATATYPE_BYTE 10
 #define DATATYPE_INT 11
 #define DATATYPE_FLOAT 12
@@ -23,6 +27,7 @@
 typedef struct hash_node
 {
 	int type;
+	int datatype;
 	char *text;
 	struct hash_node * next;
 } HASH_NODE;
@@ -33,6 +38,8 @@ int hashAddress(char *text);
 HASH_NODE *hashFind(char *text);
 HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
+
+void hashCheckUndeclared(void);
 
 #endif
 //END

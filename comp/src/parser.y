@@ -4,6 +4,7 @@
   #include "lex.yy.h"
   #include "hash.h"
   #include "astree.h"
+  #include "semantic.h"
 
   int yylex();
   int yyerror(char *message);
@@ -80,7 +81,9 @@
 
 %%
 
-programa: ldecl                                                 {root=$$;astreePrint(root, 0);}
+programa: ldecl                                                 {root=$$;astreePrint(root, 0);
+
+                                                                }
   ;
 
 ldecl: decl ldecl                                               {$$=astreeCreate(AST_LDECL, 0, $1, $2, 0, 0);}

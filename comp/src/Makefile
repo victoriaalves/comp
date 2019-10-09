@@ -1,5 +1,5 @@
-etapa3: y.tab.o lex.yy.o main.o hash.o astree.o
-	gcc -o etapa3 lex.yy.o main.o hash.o astree.o
+etapa4: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o
+	gcc -o etapa4 lex.yy.o main.o hash.o astree.o semantic.o -Wall
 
 lex.yy.o: lex.yy.c y.tab.c
 	gcc -c lex.yy.c
@@ -22,5 +22,8 @@ lex.yy.c: scanner.l
 y.tab.c: parser.y
 	yacc -d parser.y
 
+semantic.o: semantic.c
+	gcc -c semantic.c -Wall
+
 clean:
-	rm lex.yy.c y.tab.c y.tab.h etapa3 *.o *~
+	rm lex.yy.c y.tab.c y.tab.h etapa4 *.o *~

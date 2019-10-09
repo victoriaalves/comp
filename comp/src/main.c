@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   FILE *out;
 
   if (argc < 3) {
-    printf("Execute: ./etapa3 input.txt output.txt\n");
+    printf("Execute: ./etapa4 input.txt output.txt\n");
     exit(1);
   }
 
