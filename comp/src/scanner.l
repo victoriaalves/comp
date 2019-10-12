@@ -34,8 +34,8 @@ int running = 1;
 "=="													return OPERATOR_EQ;
 "!="													return OPERATOR_DIF;
 
-"TRUE"												return LIT_TRUE;
-"FALSE"												return LIT_FALSE;
+"TRUE"												{yylval.symbol =  hashInsert("TRUE", LIT_TRUE);  return LIT_TRUE;}
+"FALSE"												{yylval.symbol =  hashInsert("FALSE", LIT_FALSE);  return LIT_FALSE;}
 
 [v\,\;\:\(\)\[\]\{\}\+\-\*\/\<\>\=\.\~\&\$\#]	return yytext[0];
 

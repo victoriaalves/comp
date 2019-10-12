@@ -15,10 +15,6 @@
 #define SYMBOL_FUNC 8
 #define SYMBOL_PARAM 9
 
-// #define SYMBOL_SCALAR
-// #define SYMBOL_VECTOR
-// #define SYMBOL_FUNCTION
-
 #define DATATYPE_BYTE 10
 #define DATATYPE_INT 11
 #define DATATYPE_FLOAT 12
@@ -39,7 +35,7 @@ HASH_NODE *hashFind(char *text);
 HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
 
-void hashCheckUndeclared(void);
+int hashCheckUndeclared(void);
 
 #endif
 //END

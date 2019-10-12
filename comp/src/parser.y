@@ -74,6 +74,7 @@
 %type<ast> ldecl
 
 %left '<' '>' OPERATOR_LE OPERATOR_GE OPERATOR_EQ OPERATOR_DIF
+%left 'v' '.' '~'
 %left '+' '-'
 %left '*' '/'
 

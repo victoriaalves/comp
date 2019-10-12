@@ -893,12 +893,12 @@ return OPERATOR_DIF;
 case 19:
 YY_RULE_SETUP
 #line 37 "scanner.l"
-return LIT_TRUE;
+{yylval.symbol =  hashInsert("TRUE", LIT_TRUE);  return LIT_TRUE;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 38 "scanner.l"
-return LIT_FALSE;
+{yylval.symbol =  hashInsert("FALSE", LIT_FALSE);  return LIT_FALSE;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP

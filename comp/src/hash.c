@@ -52,17 +52,19 @@ void hashPrint(void)
 	HASH_NODE *node;
 	for(int i=0; i<HASH_SIZE; i++)
 		for(node=Table[i]; node; node = node->next)
-			printf("[Table %d] has %s\n", i, node->text);
+			printf("[Table %d] has %s\n", i, Table[i]->text);
 }
 
-void hashCheckUndeclared(void){
+int hashCheckUndeclared(void){
 	HASH_NODE *node;
+	int error = 0;
 	for(int i=0; i<HASH_SIZE; i++)
 		for(node=Table[i]; node; node = node->next)
-			if(node->type == SYMBOL_IDENTIFIER)
-			{
-				fprintf(stderr, "SemanticError: Symbol %s undeclared.\n", node->text);
-			}
+            if(node->type == SYMBOL_IDENTIFIER){
+                fprintf(stderr,"Undeclared identifier %s\n", Table[i]->text);
+                error++;
+            }
+    return error;
 }
 
 //END
