@@ -7,3 +7,4 @@ k =  2 ;
 int hello(){
 k =  2 ;
 };
+float k =  66.67 ;
