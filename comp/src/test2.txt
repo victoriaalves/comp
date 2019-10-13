@@ -1,3 +1,13 @@
 int y = 1;
 float k = 66.67;
 float k = 66.67;
+
+int hello ()
+{
+  k = 2;
+}
+
+int hello ()
+{
+  k = 2;
+}

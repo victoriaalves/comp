@@ -1620,7 +1620,7 @@ yyreduce:
 
   case 20:
 #line 121 "parser.y"
-    {(yyval.ast)=astreeCreate(AST_ATRIB, (yyvsp[(2) - (5)].symbol), (yyvsp[(1) - (5)].ast), (yyvsp[(4) - (5)].ast), 0, 0);}
+    {(yyval.ast)=astreeCreate(AST_VARDEC, (yyvsp[(2) - (5)].symbol), (yyvsp[(1) - (5)].ast), (yyvsp[(4) - (5)].ast), 0, 0);}
     break;
 
   case 21:

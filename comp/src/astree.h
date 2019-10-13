@@ -15,7 +15,7 @@
 #define AST_FLOAT 8
 #define AST_FUNC 9
 #define AST_PARAM 10
-#define AST_ATRIB 11
+#define AST_VARDEC 11
 #define AST_VEC 12
 #define AST_LIT 13 // um elemento do vector
 #define AST_LLIT 14 // lista de elementos do vector
