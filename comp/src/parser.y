@@ -84,7 +84,6 @@
 
 programa: ldecl                                                 {root = $1;
                                                                 astreePrint($1, 0);
-                                                                fprintf(stderr, "Checking semantic.\n", getSemanticErrors());
                                                                 checkAndSetTypes($1);
                                                                 hashCheckUndeclared();
                                                                 checkOperands($1);

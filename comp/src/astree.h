@@ -57,6 +57,7 @@
 #define AST_EXPPRINT 50
 #define AST_RESTO 51
 #define AST_LDECL 52
+#define AST_ERROR 100
 
 #define MAX_SONS 4
 
