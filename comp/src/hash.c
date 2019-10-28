@@ -56,15 +56,16 @@ void hashPrint(void)
 }
 
 int hashCheckUndeclared(void){
-	HASH_NODE *node;
-	int error = 0;
-	for(int i=0; i<HASH_SIZE; i++)
-		for(node=Table[i]; node; node = node->next)
-            if(node->type == SYMBOL_IDENTIFIER){
-                fprintf(stderr,"Undeclared identifier %s\n", Table[i]->text);
-                error++;
-            }
-    return error;
+  HASH_NODE *node;
+  int error = 0;
+  for(int i=0; i<HASH_SIZE; i++) {
+    for(node=Table[i]; node; node = node->next)
+      if(node->type == SYMBOL_IDENTIFIER){
+        fprintf(stderr,"Undeclared identifier %s\n", Table[i]->text);
+        error++;
+      }
+  }
+  return error;
 }
 
 //END

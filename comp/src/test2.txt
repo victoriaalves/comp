@@ -1,6 +1,6 @@
 int y = 1;
 float k = 66.67;
-float k = 66.67;
+int k = 66.67;
 
 int hello ()
 {
@@ -9,7 +9,7 @@ int hello ()
 
 int hello ()
 {
-  k = 2;
+  teste = 2;
 }
 
 float k = 66.67;
