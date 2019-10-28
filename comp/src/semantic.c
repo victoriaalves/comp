@@ -71,7 +71,7 @@ void checkOperands(AST *node){
         } else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
           }
       }
     break;
@@ -89,7 +89,7 @@ void checkOperands(AST *node){
         } else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
           }
       }
     break;
@@ -106,7 +106,7 @@ void checkOperands(AST *node){
         } else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
           }
       }
     break;
@@ -121,7 +121,7 @@ void checkOperands(AST *node){
         else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
         }
     break;
 
@@ -134,19 +134,19 @@ void checkOperands(AST *node){
         else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
         }
       }
     break;
 
     case AST_PRINT:
-      if (node->son[0]->symbol->type == LIT_STRING) {
+      if (node->son[0]->symbol->type == AST_SYMBOL) {
         // tudo certo
       }
       else {
         fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
         semanticErrors++;
-        node->datatype = AST_ERROR;
+        node->type = AST_ERROR;
       }
     break;
 
@@ -157,7 +157,7 @@ void checkOperands(AST *node){
       else {
         fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
         semanticErrors++;
-        node->datatype = AST_ERROR;
+        node->type = AST_ERROR;
       }
     break;
 
@@ -171,7 +171,7 @@ void checkOperands(AST *node){
       else {
         fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
         semanticErrors++;
-        node->datatype = AST_ERROR;
+        node->type = AST_ERROR;
       }
     break;
 
@@ -185,8 +185,12 @@ void checkOperands(AST *node){
          (node->son[1]->symbol->type == AST_SYMBOL) ) {
 
       }
-    
-    break;
+      else {
+        fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+        semanticErrors++;
+        node->type = AST_ERROR;
+      }
+  break;
 
     case AST_VECEXP:
       for(int operand = 0; operand < 2; operand++) {
@@ -196,15 +200,15 @@ void checkOperands(AST *node){
         else {
             fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
             semanticErrors++;
-            node->datatype = AST_ERROR;
+            node->type = AST_ERROR;
         }
       }
     break;
-    }
 
     case AST_SYMBOL:
-      node->datatype = node->symbol->datatype;
+      node->type = node->symbol->datatype;
     break;
+  }
 
     for(int i = 0; i < MAX_SONS; i++){
         checkOperands(node->son[i]);
