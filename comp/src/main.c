@@ -15,6 +15,7 @@ extern AST* getAST();
 
 extern int yyparse();
 extern int yyerror();
+extern int checkSemantic();
 
 int main(int argc, char **argv)
 {
@@ -46,6 +47,7 @@ int main(int argc, char **argv)
   fprintf(stderr, "Uncompiling!\n");
 
   uncompileAST(getAST(), out);
+  checkSemantic();
 
   fclose(out);
 

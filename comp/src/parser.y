@@ -84,10 +84,6 @@
 
 programa: ldecl                                                 {root = $1;
                                                                 astreePrint($1, 0);
-                                                                checkAndSetTypes($1);
-                                                                hashCheckUndeclared();
-                                                                checkOperands($1);
-                                                                fprintf(stderr, "%d semantic errors.\n", getSemanticErrors());
                                                                 }
   ;
 
@@ -219,6 +215,21 @@ int yyerror(char *msg){
   printf("Linha %d [erro de sintaxe]: %s.\n", getLineNumber(), msg);
   exit(3);
 }
+
+int checkSemantic() {
+  fprintf(stderr, "Checking semantic.\n");
+  
+  checkAndSetTypes(root);
+  hashCheckUndeclared();
+  checkOperands(root);
+  
+  fprintf(stderr, "%d semantic errors.\n", getSemanticErrors());
+  if (getSemanticErrors() != 0) {
+    exit(4);
+  }
+  return 0;
+}
+
 
 AST* getAST(){
 	return root;

@@ -8,6 +8,7 @@ int getSemanticErrors(){
     return semanticErrors;
 }
 
+
 void checkAndSetTypes(AST*node){
   if(!node) return;
 
