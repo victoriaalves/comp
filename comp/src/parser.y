@@ -222,9 +222,10 @@ int checkSemantic() {
   checkAndSetTypes(root);
   checkOperands(root);
   hashCheckUndeclared();
-  
-  fprintf(stderr, "%d semantic errors.\n", getSemanticErrors());
-  if (getSemanticErrors() != 0) {
+ 
+  int errors = getSemanticErrors(); 
+  fprintf(stderr, "%d semantic errors.\n", errors);
+  if (errors != 0) {
     exit(4);
   }
   return 0;

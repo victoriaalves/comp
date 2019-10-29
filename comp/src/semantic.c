@@ -2,6 +2,8 @@
 #include "hash.h"
 #include "astree.h"
 
+extern AST*getAST();
+
 int semanticErrors = 0;
 
 int getSemanticErrors(){
@@ -32,7 +34,58 @@ void checkUsage(AST*node){
     }
 
     for(int i = 0; i < MAX_SONS; i++)
-		checkUsage(node->son[i]);
+      checkUsage(node->son[i]);
+}
+
+void checkFunctions(AST*node){
+  AST* declaration = findFunctionDeclaration(node->symbol->text, getAST());
+  if(declaration == NULL){
+    fprintf(stderr, "Semantic ERROR in line %d: Only functions can be called.\n", node->line);
+    semanticErrors++;
+  }
+
+  int numberOfArgumentsCalled= getNumberOfArguments(node->son[0]);
+  int numberOfArgumentsDeclared = getNumberOfArguments(declaration->son[1]);
+  if(numberOfArgumentsCalled != numberOfArgumentsDeclared){
+    fprintf(stderr, "Semantic ERROR in line %d: Incompatible number of arguments.\n", node->line);
+    semanticErrors++;
+  }
+  else {
+    compareArguments(node->son[0], declaration->son[1]);
+  }
+}
+
+AST* findFunctionDeclaration(char * name, AST * node){
+  if(node->symbol != NULL && node->type == AST_FUNC && strcmp(node->symbol->text, name) == 0)
+    return node;
+
+  for(int i = 0; i < MAX_SONS; i++){
+    if (node->son[i] == NULL)
+      return NULL;
+    AST * finding = findFunctionDeclaration(name, node->son[i]) ;
+    if(finding != NULL)
+      return finding;
+  }
+  return NULL;
+}
+
+int getNumberOfArguments(AST * node){
+  if(node == NULL) return 0;
+  if(node->son[1] != NULL)
+    return 1 + getNumberOfArguments(node->son[1]);
+  else
+    return 0;
+}
+
+void compareArguments(AST *node, AST *declaration){
+  if(node->son[0] != NULL){
+    if(node->son[0]->type != declaration->son[0]->symbol->datatype) {
+      fprintf(stderr, "Semantic ERROR: Incompatible argument types at line %d\n", node->line);
+      semanticErrors++;
+    }
+    if(node->son[1] != NULL)
+      compareArguments(node->son[1], declaration->son[1]);
+  }
 }
 
 void checkAndSetTypes(AST*node){
@@ -55,8 +108,8 @@ void checkAndSetTypes(AST*node){
         node->symbol->datatype = DATATYPE_INT;
       if(node->son[0]->type == AST_FLOAT)
         node->symbol->datatype = DATATYPE_FLOAT;
-      }
     }
+  }
 
   for(int i = 0; i < MAX_SONS; i++){
     checkAndSetTypes(node->son[i]);
@@ -207,6 +260,9 @@ void checkOperands(AST *node){
       }
     break;
 
+    case AST_FUNC:
+      checkFunctions(node);
+    break;
 
     case AST_VEC:
       if ((node->son[0]->type == AST_BOOL ||
