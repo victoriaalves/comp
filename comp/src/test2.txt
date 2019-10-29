@@ -8,6 +8,7 @@ int v3[1];
 int hello ()
 {
   k = 2;
+  k = 3;
 }
 
 int hello ()

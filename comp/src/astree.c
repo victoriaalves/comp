@@ -98,7 +98,9 @@ void uncompileAST(AST *node, FILE *file){
 
     switch(node->type){
         case AST_SYMBOL:
-            fprintf(file, " %s ", node->symbol->text);
+        if (node->symbol)
+            if (node->symbol->text)
+                fprintf(file, " %s ", node->symbol->text);
             break;
 
         case AST_ADD:
@@ -145,7 +147,7 @@ void uncompileAST(AST *node, FILE *file){
             uncompileAST(node->son[1], file);
             fprintf(file, ")");
             uncompileAST(node->son[2], file);
-            fprintf(file, ";\n");
+            //fprintf(file, ";\n");
             break;
 
         case AST_PARAM:
@@ -195,11 +197,13 @@ void uncompileAST(AST *node, FILE *file){
             break;
 
         case AST_LPRINT: // dúvida
-            fprintf(file, " %s ", node->symbol->text);
-            uncompileAST(node->son[0], file);
+            if (node->symbol)
+                if (node->symbol->text)
+                    fprintf(file, " %s ", node->symbol->text);
+                uncompileAST(node->son[0], file);
             break;
 
-            case AST_ID:
+        case AST_ID:
             fprintf(file, "%s = ", node->symbol->text);
             uncompileAST(node->son[0], file);
             break;
@@ -254,7 +258,7 @@ void uncompileAST(AST *node, FILE *file){
 
         case AST_FOR:
             fprintf(file, "for(");
-            fprintf(file, " %s = ", node->symbol->text);
+            fprintf(file, " %s : ", node->symbol->text);
             uncompileAST(node->son[0], file);
             fprintf(file, ", ");
             uncompileAST(node->son[1], file);
@@ -289,6 +293,7 @@ void uncompileAST(AST *node, FILE *file){
             fprintf(file, ";\n");
             uncompileAST(node->son[0], file);
             uncompileAST(node->son[1], file);
+            //printf()
             break;
 
         case AST_LEXPPARAM:

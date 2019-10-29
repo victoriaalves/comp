@@ -59,10 +59,10 @@
 %type<ast> init
 %type<ast> arrayInit
 %type<ast> listaLit
+%type<ast> resto
 %type<ast> parLista
 %type<ast> par
 %type<ast> block
-%type<ast> resto
 %type<ast> printLista
 %type<ast> cmdSimples
 %type<ast> fluxo
@@ -144,7 +144,7 @@ resto: ',' parLista                                             {$$=astreeCreate
 block: '{' lcmd '}'                                             {$$=astreeCreate(AST_BLOCK, 0, $2, 0, 0, 0, getLineNumber());}
   ;
 
-printLista: LIT_STRING printLista                               {$$=astreeCreate(AST_LPRINT, 0, astreeCreate(AST_SYMBOL, $1, 0, 0, 0, 0, getLineNumber()), $2, 0, 0, getLineNumber());}
+printLista: LIT_STRING printLista                               {$$=astreeCreate(AST_LPRINT, $1, $2, 0, 0, 0, getLineNumber());}
   | exp printLista                                              {$$=astreeCreate(AST_EXPPRINT, 0, $1, $2, 0, 0, getLineNumber());}
   |                                                             {$$=0;}
   ;
@@ -160,7 +160,7 @@ cmdSimples: TK_IDENTIFIER '=' exp                               {$$=astreeCreate
 fluxo: KW_IF '(' exp ')' KW_THEN cmd KW_ELSE cmd                {$$=astreeCreate(AST_IFELSE, 0, $3, $6, $8, 0, getLineNumber());}
   | KW_IF '(' exp ')' KW_THEN cmd                               {$$=astreeCreate(AST_IF, 0, $3, $6, 0, 0, getLineNumber());}
   | KW_WHILE '(' exp ')' cmd                                    {$$=astreeCreate(AST_WHILE, 0, $3, $5, 0, 0, getLineNumber());}
-  | KW_FOR '(' TK_IDENTIFIER '=' exp ',' exp ',' exp ')' cmd    {$$=astreeCreate(AST_FOR, $3, $5, $7, $9, $11, getLineNumber());}
+  | KW_FOR '(' TK_IDENTIFIER ':' exp ',' exp ',' exp ')' cmd    {$$=astreeCreate(AST_FOR, $3, $5, $7, $9, $11, getLineNumber());}
   | KW_BREAK                                                    {$$=astreeCreate(AST_BREAK, 0, 0, 0, 0, 0, getLineNumber());}
   ;
 
@@ -218,12 +218,12 @@ int yyerror(char *msg){
 
 int checkSemantic() {
   fprintf(stderr, "Checking semantic.\n");
-  
+
   checkAndSetTypes(root);
   checkOperands(root);
   hashCheckUndeclared();
- 
-  int errors = getSemanticErrors(); 
+
+  int errors = getSemanticErrors();
   fprintf(stderr, "%d semantic errors.\n", errors);
   if (errors != 0) {
     exit(4);

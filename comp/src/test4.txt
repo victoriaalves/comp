@@ -1,0 +1,14 @@
+int a = 0;
+int c = 0;
+int x = 0;
+
+
+int function ( int x, int y, int z )
+  {
+  if (a==0) then
+  	print x
+  else
+	print "nada";
+
+  while (a==0) { print x;  }
+ }
