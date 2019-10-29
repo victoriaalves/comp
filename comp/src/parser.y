@@ -220,8 +220,8 @@ int checkSemantic() {
   fprintf(stderr, "Checking semantic.\n");
   
   checkAndSetTypes(root);
-  hashCheckUndeclared();
   checkOperands(root);
+  hashCheckUndeclared();
   
   fprintf(stderr, "%d semantic errors.\n", getSemanticErrors());
   if (getSemanticErrors() != 0) {
@@ -229,7 +229,6 @@ int checkSemantic() {
   }
   return 0;
 }
-
 
 AST* getAST(){
 	return root;

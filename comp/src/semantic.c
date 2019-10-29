@@ -81,6 +81,7 @@ void checkOperands(AST *node){
     case AST_SMALLER:
     case AST_LE:
     case AST_GE:
+      node->type = AST_BOOL;
       for(int operand = 0; operand < 2; operand++) {
         if(node->son[operand]->type == AST_INT ||
             node->son[operand]->type == AST_FLOAT ||
@@ -97,6 +98,7 @@ void checkOperands(AST *node){
 
     case AST_DIF:
     case AST_EQ:
+      node->type = AST_BOOL;
       for(int operand = 0; operand < 2; operand++) {
         if(node->son[operand]->symbol->datatype == AST_BOOL &&
             (node->son[operand]->type == AST_INT ||
@@ -116,6 +118,7 @@ void checkOperands(AST *node){
     case AST_IFELSE:
     case AST_IF:
     case AST_NOT:
+      node->type = AST_BOOL;
         if(node->son[0]->symbol->datatype == AST_BOOL) {
           // tudo certo
         }
@@ -128,6 +131,7 @@ void checkOperands(AST *node){
 
     case AST_AND:
     case AST_OR:
+      node->type = AST_BOOL;
       for(int operand = 0; operand < 2; operand++) {
         if(node->son[operand]->symbol->datatype == AST_BOOL) {
           // tudo certo
@@ -182,8 +186,8 @@ void checkOperands(AST *node){
           node->son[0]->type == AST_BYTE ||
           node->son[0]->type == AST_FLOAT ||
           node->son[0]->type == AST_INT ||
-          node->son[0]->type == AST_LONG) &&
-         (node->son[1]->symbol->type == AST_SYMBOL) ) {
+          node->son[0]->type == AST_LONG) ) {
+        // TODO arrumar pq int vec[3] : 3 4 5; não funciona
 
       }
       else {
