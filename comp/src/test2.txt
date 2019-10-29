@@ -3,6 +3,7 @@ float k = 66.67;
 int k = 66.67;
 int v1[3]: 1 2 3;
 int teste = 2;
+int v2[1];
 
 int hello ()
 {
