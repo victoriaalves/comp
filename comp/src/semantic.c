@@ -22,12 +22,46 @@ void checkUsage(AST*node){
         }
         break;
 
+      case AST_VECEXP:
+			  if(node->son[0]->type == AST_DIV) {
+          fprintf(stderr, "Semantic ERROR: Index of vector must be integer, error at line %d.\n", node->line);
+          semanticErrors++;
+			  } else if(node->symbol->type != SYMBOL_VEC){
+          fprintf(stderr, "Semantic ERROR: Expression of vector attribution is invalid, error at line %d.\n", node->line);
+          semanticErrors++;
+			  }
+			  break;
+
       case AST_VEC:
         if(node->symbol->type != SYMBOL_VEC){
           fprintf(stderr, "Semantic ERROR: Indexing only allowed for vectors, error at line %d.\n", node->line);
           semanticErrors++;
         }
         break;
+
+      case AST_EXPARRAY:
+			  if(node->son[0]->type == AST_DIV) {
+          fprintf(stderr, "Semantic ERROR: Index of vector must be integer, error at line %d.\n", node->line);
+          semanticErrors++;
+			  }else if(node->symbol->type != SYMBOL_VEC){
+          fprintf(stderr, "Semantic ERROR: Expression of access to vector is invalid, error at line %d.\n", node->line);
+          semanticErrors++;
+			  }
+			  break;
+
+		  case AST_EXPEXP:
+			  if(node->symbol->type != SYMBOL_FUNC){
+          fprintf(stderr, "Semantic ERROR: Expression of function calling is invalid, error at line %d.\n", node->line);
+          semanticErrors++;
+			  }
+			  break;
+
+		  case AST_READID:
+			  if(node->symbol->type != SYMBOL_VAR){
+          fprintf(stderr, "Semantic ERROR: Read command is invalid, only scalar values allowed, error at line %d.\n", node->line);
+          semanticErrors++;
+			  }
+			  break;
 
       default:
         break;
