@@ -8,11 +8,37 @@ int getSemanticErrors(){
     return semanticErrors;
 }
 
+void checkUsage(AST*node){
+  if(node == NULL)
+    return;
+
+    switch (node->type){
+      case AST_VARDEC:
+        if(node->symbol->type != SYMBOL_VAR){
+          fprintf(stderr, "Semantic ERROR: Attribution must be to a scalar variable, error at line %d.\n", node->line);
+          semanticErrors++;
+        }
+        break;
+
+      case AST_VEC:
+        if(node->symbol->type != SYMBOL_VEC){
+          fprintf(stderr, "Semantic ERROR: Indexing only allowed for vectors, error at line %d.\n", node->line);
+          semanticErrors++;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    for(int i = 0; i < MAX_SONS; i++)
+		checkUsage(node->son[i]);
+}
 
 void checkAndSetTypes(AST*node){
   if(!node) return;
 
-  if(node->type == AST_VARDEC || node->type == AST_FUNC){
+  if(node->type == AST_VARDEC || node->type == AST_FUNC || node->type == AST_VEC){
     if(node->symbol){
       if(node->symbol->type != SYMBOL_IDENTIFIER){
         fprintf(stderr, "Semantic ERROR: Symbol %s already declared, error at line %d.\n", node->symbol->text, node->line);
@@ -23,7 +49,8 @@ void checkAndSetTypes(AST*node){
         node->symbol->type = SYMBOL_VAR;
       if(node->type == AST_FUNC)
         node->symbol->type = SYMBOL_FUNC;
-
+      if(node->type == AST_VEC)
+        node->symbol->type = SYMBOL_VEC;
       if(node->son[0]->type == AST_INT)
         node->symbol->datatype = DATATYPE_INT;
       if(node->son[0]->type == AST_FLOAT)
@@ -70,7 +97,7 @@ void checkOperands(AST *node){
             ){
           // tudo certo
         } else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
           }
@@ -89,7 +116,7 @@ void checkOperands(AST *node){
             node->son[operand]->type == AST_LONG ) {
           // tudo certo
         } else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
           }
@@ -107,7 +134,7 @@ void checkOperands(AST *node){
              node->son[operand]->type == AST_LONG ) ) {
           // tudo certo
         } else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
           }
@@ -123,7 +150,7 @@ void checkOperands(AST *node){
           // tudo certo
         }
         else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
         }
@@ -137,7 +164,7 @@ void checkOperands(AST *node){
           // tudo certo
         }
         else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
         }
@@ -149,7 +176,7 @@ void checkOperands(AST *node){
         // tudo certo
       }
       else {
-        fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+        fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
         semanticErrors++;
         node->type = AST_ERROR;
       }
@@ -160,7 +187,7 @@ void checkOperands(AST *node){
         // tudo certo
       }
       else {
-        fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+        fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
         semanticErrors++;
         node->type = AST_ERROR;
       }
@@ -174,7 +201,7 @@ void checkOperands(AST *node){
         // tudo certo
       }
       else {
-        fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+        fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
         semanticErrors++;
         node->type = AST_ERROR;
       }
@@ -191,7 +218,7 @@ void checkOperands(AST *node){
 
       }
       else {
-        fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+        fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
         semanticErrors++;
         node->type = AST_ERROR;
       }
@@ -203,7 +230,7 @@ void checkOperands(AST *node){
           // tudo certo
         }
         else {
-            fprintf(stderr, "Semantic ERROR: Operands not compatible.\n");
+            fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
             semanticErrors++;
             node->type = AST_ERROR;
         }

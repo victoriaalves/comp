@@ -1,10 +1,13 @@
-int y = ;
-float k = ;
-int k = ;
+int y =  1 ;
+float k =  66.67 ;
+int k =  66.67 ;
+int v1[ 3 ]:  1   2   3  ;
+int teste =  2 ;
+int v2[ 1 ];
 int hello(){
-k = ;
+k =  2 ;
 };
 int hello(){
-teste = ;
+teste =  2 ;
 };
-float k = ;
+float k =  66.67 ;
