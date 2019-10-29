@@ -12,7 +12,7 @@ int getSemanticErrors(){
 void checkAndSetTypes(AST*node){
   if(!node) return;
 
-  if(node->type == AST_VARDEC || node->type == AST_FUNC){
+  if(node->type == AST_VARDEC || node->type == AST_FUNC || node->type == AST_VEC){
     if(node->symbol){
       if(node->symbol->type != SYMBOL_IDENTIFIER){
         fprintf(stderr, "Semantic ERROR: Symbol %s already declared, error at line %d.\n", node->symbol->text, node->line);
@@ -23,7 +23,8 @@ void checkAndSetTypes(AST*node){
         node->symbol->type = SYMBOL_VAR;
       if(node->type == AST_FUNC)
         node->symbol->type = SYMBOL_FUNC;
-
+      if(node->type == AST_VEC)
+        node->symbol->type = SYMBOL_VEC;
       if(node->son[0]->type == AST_INT)
         node->symbol->datatype = DATATYPE_INT;
       if(node->son[0]->type == AST_FLOAT)
