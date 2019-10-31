@@ -399,5 +399,3 @@ void uncompileAST(AST *node, FILE *file){
             break;
     }
 }
-
-
