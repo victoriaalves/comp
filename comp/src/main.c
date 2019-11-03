@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 
   initMe();
   yyparse();
+  //hashPrint();
 
   fprintf(stderr, "Compiled Successfully.\n");
 

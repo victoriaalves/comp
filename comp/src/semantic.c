@@ -247,7 +247,7 @@ void checkOperands(AST *node){
          // tudo certo
       }
       else {
-        fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
+        fprintf(stderr, "Semantic ERROR in %d: operands not compatible, error at line %d.\n", node->son[0]->type, node->line);
         semanticErrors++;
         node->type = AST_ERROR;
       }
