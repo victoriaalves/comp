@@ -49,13 +49,6 @@ void checkUsage(AST*node){
       }
       break;
 
-    case AST_EXPEXP:
-      if(node->symbol->type != SYMBOL_FUNC){
-        fprintf(stderr, "Semantic ERROR: Expression of function calling is invalid, error at line %d.\n", node->line);
-        semanticErrors++;
-      }
-      break;
-
     case AST_READID:
       if(node->symbol->type != SYMBOL_VAR){
         fprintf(stderr, "Semantic ERROR: Read command is invalid, only scalar values allowed, error at line %d.\n", node->line);
@@ -85,7 +78,8 @@ void checkFunctions(AST*node){
     semanticErrors++;
   }
   else {
-    compareArguments(node->son[0], declaration->son[1]);
+    //compareArguments(node->son[1], declaration->son[1]);
+    fprintf(stderr, "fine\n");
   }
 }
 
@@ -232,9 +226,25 @@ void checkOperands(AST *node){
     case AST_IFELSE:
     case AST_IF:
     case AST_NOT:
-      node->type = AST_BOOL;
-      if(node->son[0]->symbol->datatype == AST_BOOL) {
-        // tudo certo
+       if (node->son[0]->type == AST_SYMBOL ||
+           node->son[0]->type == AST_EXP ||
+           node->son[0]->type == AST_EXPARRAY ||
+           node->son[0]->type == AST_FUNCALL ||
+           node->son[0]->type == AST_ADD ||
+           node->son[0]->type == AST_SUB ||
+           node->son[0]->type == AST_MUL ||
+           node->son[0]->type == AST_DIV ||
+           node->son[0]->type == AST_GREATER ||
+           node->son[0]->type == AST_SMALLER ||
+           node->son[0]->type == AST_OR ||
+           node->son[0]->type == AST_AND ||
+           node->son[0]->type == AST_NOT ||
+           node->son[0]->type == AST_LE ||
+           node->son[0]->type == AST_GE ||
+           node->son[0]->type == AST_EQ ||
+           node->son[0]->type == AST_DIF
+           ) {
+         // tudo certo
       }
       else {
         fprintf(stderr, "Semantic ERROR: Operands not compatible, error at line %d.\n", node->line);
@@ -259,7 +269,7 @@ void checkOperands(AST *node){
       break;
 
     case AST_PRINT:
-      if (node->son[0]->symbol->type == AST_SYMBOL) {
+      if (node->son[0]->type == AST_LPRINT) {
         // tudo certo
       }
       else {
@@ -295,7 +305,40 @@ void checkOperands(AST *node){
       break;
 
     case AST_FUNC:
-      checkFunctions(node);
+      if (node->son[0]->type == AST_INT ||
+          node->son[0]->type == AST_LONG ||
+          node->son[0]->type == AST_FLOAT ||
+          node->son[0]->type == AST_BYTE) {
+        if (node->son[1] != NULL) {
+          AST* parlista = node->son[1];
+          while (parlista != NULL) {
+            if (parlista->son[0]->type == AST_VEC) {
+              // se o primeiro argumento é vetor, dá erro
+              fprintf(stderr, "Semantic ERROR: Functions cannot have arrays as arguments, error at line %d.\n", node->line);
+              semanticErrors++;
+              node->type = AST_ERROR;
+              break;
+            }
+            else {
+              // se não for vetor, vai para o próximo argumento
+              if (parlista->son[1] != NULL){
+                parlista = parlista->son[1]->son[0];
+              }
+              else parlista = NULL;
+            }
+          }
+        }
+      }
+      else {
+        fprintf(stderr, "Semantic ERROR: Invalid function type, error at line %d.\n", node->line);
+        semanticErrors++;
+        node->type = AST_ERROR;
+      }
+      break;
+
+
+    case AST_FUNCALL:
+      //checkFunctions(node);
       break;
 
     case AST_VEC:
