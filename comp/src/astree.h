@@ -42,7 +42,7 @@
 #define AST_EXPPARAM 35
 #define AST_EXP 36
 #define AST_EXPARRAY 37
-#define AST_EXPEXP 38
+#define AST_FUNCALL 38
 #define AST_SUB 39
 #define AST_DIV 40
 #define AST_GREATER 41

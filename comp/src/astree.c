@@ -66,7 +66,7 @@ void astreePrint(AST *node, int level){
         case AST_EXPPARAM: fprintf(stderr, "AST_EXPPARAM,"); break;
         case AST_EXP: fprintf(stderr, "AST_EXP,"); break;
         case AST_EXPARRAY: fprintf(stderr, "AST_EXPARRAY,"); break;
-        case AST_EXPEXP: fprintf(stderr, "AST_EXPEXP,"); break;
+        case AST_FUNCALL: fprintf(stderr, "AST_FUNCALL,"); break;
         case AST_SUB: fprintf(stderr, "AST_SUB,"); break;
         case AST_GREATER: fprintf(stderr, "AST_GREATER,"); break;
         case AST_SMALLER: fprintf(stderr, "AST_SMALLER,"); break;
@@ -318,7 +318,7 @@ void uncompileAST(AST *node, FILE *file){
             fprintf(file, "]");
             break;
 
-        case AST_EXPEXP:
+        case AST_FUNCALL:
             fprintf(file, "%s(", node->symbol->text);
             uncompileAST(node->son[0], file);
             fprintf(file, ")");
