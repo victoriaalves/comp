@@ -4,11 +4,13 @@ int x = 0;
 
 
 int function ( int x, int y, int z )
-  {
+{
+  a=5;
+  c=a;
   if (a==0) then
-  	print x
+    print x
   else
-	print "nada";
+    print "nada";
 
   while (a==0) { print x;  }
- }
+}
