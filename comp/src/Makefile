@@ -1,5 +1,5 @@
-etapa4: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o
-	gcc -ggdb -o etapa4 lex.yy.o main.o hash.o astree.o semantic.o -Wall
+etapa5: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o
+	gcc -ggdb -o etapa5 lex.yy.o main.o hash.o astree.o semantic.o -Wall
 
 lex.yy.o: lex.yy.c y.tab.c
 	gcc -ggdb -c lex.yy.c
@@ -16,6 +16,9 @@ main.o: main.c
 astree.o: astree.c
 	gcc -ggdb -c astree.c -Wall
 
+tacs.o: tacs.c
+	gcc -c tacs.c
+
 lex.yy.c: scanner.l
 	lex --header-file=lex.yy.h scanner.l
 
@@ -26,4 +29,4 @@ semantic.o: semantic.c
 	gcc -ggdb -c semantic.c -Wall
 
 clean:
-	rm lex.yy.c y.tab.c y.tab.h etapa4 *.o *~
+	rm lex.yy.c y.tab.c y.tab.h etapa5 *.o *~

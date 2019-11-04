@@ -128,12 +128,19 @@ void checkAndSetTypes(AST*node){
 
       if(node->type == AST_VARDEC)
         node->symbol->type = SYMBOL_VAR;
+
       if(node->type == AST_FUNC)
         node->symbol->type = SYMBOL_FUNC;
+
+      if(node->type == AST_PARAM)
+        node->symbol->type = SYMBOL_PARAM;
+
       if(node->type == AST_VEC)
         node->symbol->type = SYMBOL_VEC;
+
       if(node->son[0]->type == AST_INT)
         node->symbol->datatype = DATATYPE_INT;
+
       if(node->son[0]->type == AST_FLOAT)
         node->symbol->datatype = DATATYPE_FLOAT;
     }

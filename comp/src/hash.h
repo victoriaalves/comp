@@ -15,6 +15,7 @@
 #define SYMBOL_VAR 100
 #define SYMBOL_VEC 101
 #define SYMBOL_FUNC 102
+#define SYMBOL_PARAM 103
 
 #define DATATYPE_BYTE 500
 #define DATATYPE_INT 501

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "hash.h"
 #include "astree.h"
+#include "tacs.h"
 
 // Necessário declarar como extern as funções do scanner,
 // que são compiladas em lex.yy.c
@@ -22,7 +23,7 @@ int main(int argc, char **argv)
   FILE *out;
 
   if (argc < 3) {
-    printf("Execute: ./etapa4 input.txt output.txt\n");
+    printf("Execute: ./etapa5 input.txt output.txt\n");
     exit(1);
   }
 
