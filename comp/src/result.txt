@@ -1,0 +1,4 @@
+int k =  1 ;
+int hello(){
+k =  2  +  3 ;
+}
