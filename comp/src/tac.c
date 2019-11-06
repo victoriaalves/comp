@@ -1,6 +1,7 @@
 #import "tac.h"
 
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
+TAC* makeIfThen(TAC* code0, TAC* code1);
 
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
@@ -32,6 +33,10 @@ TAC* generateCode(AST *ast){
         case AST_SUB: return makeBinOperation(TAC_SUB, code[0], code[1]);
         case AST_MUL: return makeBinOperation(TAC_MUL, code[0], code[1]);
         case AST_DIV: return makeBinOperation(TAC_DIV, code[0], code[1]);
+
+
+        case AST_IF: return makeIfThen(code[0], code[1]);
+
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
 }
@@ -44,6 +49,18 @@ TAC* makeBinOperation(int type, TAC* code0, TAC* code1){
                               makeTemp(),
                               code0? code0->res : 0,
                               code1? code1->res : 0));
+}
+
+TAC* makeIfThen(TAC* code0, TAC* code1){
+  HASH_NODE *label = 0;
+  TAC *tacif = 0;
+  TAC *taclabel = 0;
+
+  label = makeLabel();
+  tacif = tacCreate(TAC_IFZ, label, code0?code0->res:0,0);
+  taclabel = tacCreate(TAC_LABEL, label, 0, 0);
+
+  return tacJoin(tacJoin(tacJoin(code0, tacif), code1), taclabel);
 }
 
 TAC* tacJoin(TAC* l1, TAC* l2){
@@ -70,6 +87,8 @@ void tacPrintSingle(TAC *tac){
         case TAC_MUL: fprintf(stderr, "TAC_MUL"); break;
         case TAC_DIV: fprintf(stderr, "TAC_DIV"); break;
         case TAC_MOVE: fprintf(stderr, "TAC_MOVE"); break;
+        case TAC_IFZ: fprintf(stderr, "TAC_MOVE"); break;
+        case TAC_LABEL: fprintf(stderr, "TAC_MOVE"); break;
         default: fprintf(stderr, "UNKNOWN"); break;
     }
 

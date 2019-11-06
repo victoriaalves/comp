@@ -13,7 +13,6 @@
 #define TAC_IFZ     7
 #define TAC_LABEL   8
 
-
 typedef struct tac_node{
     int type;
     HASH_NODE *res;
