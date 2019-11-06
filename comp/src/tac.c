@@ -1,7 +1,5 @@
 #import "tac.h"
 
-//TAC* makeBinOp(int type, TAC* code0, TAC* code1);
-
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
     newTac = (TAC*) calloc(1, sizeof(TAC));
@@ -29,7 +27,6 @@ TAC* generateCode(AST *ast){
         case AST_SYMBOL: return tacCreate(TAC_SYMBOL, ast->symbol, 0, 0);
         case AST_ASS: return tacJoin(code[0],tacCreate(TAC_MOVE,ast->symbol,code[0]?code[0]->res:0,0));
         case AST_ADD: return tacJoin(tacJoin(code[0],code[1]), tacCreate(TAC_ADD,makeTemp(),code[0]?code[0]->res:0,code[1]?code[1]->res:0));
-        //case AST_ADD: return
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
 }
@@ -62,11 +59,11 @@ void tacPrintSingle(TAC *tac){
     }
 
     if(tac->res) fprintf(stderr, ", %s", tac->res->text);
-        else fprintf(stderr, "0");
+        else fprintf(stderr, ", 0");
     if(tac->op1) fprintf(stderr, ", %s", tac->op1->text);
-        else fprintf(stderr, "0");
+        else fprintf(stderr, ", 0");
     if(tac->op2) fprintf(stderr, ", %s", tac->op2->text);
-        else fprintf(stderr, "0");
+        else fprintf(stderr, ", 0");
 
     fprintf(stderr, ");\n");
 }
@@ -85,3 +82,13 @@ TAC* makeBinOp(int type, TAC* code0, TAC* code1){
   novatac->prev = list;
   return novatac;
 }
+
+// TAC* makeBinOp(int type, TAC* code[]){
+// 	HASH_NODE * op1;
+// 	HASH_NODE * op2;
+
+// 	if(code[0]) op1 = code[0]->res; else op1 = 0;
+// 	if(code[1]) op2 = code[1]->res; else op2 = 0;
+
+// 	return tacJoin(code[0], tacJoin(code[1], tacCreate(type, makeTemp(), op1, op2)));
+// }
