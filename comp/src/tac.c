@@ -29,6 +29,9 @@ TAC* generateCode(AST *ast){
         case AST_SYMBOL: return tacCreate(TAC_SYMBOL, ast->symbol, 0, 0);
         case AST_ASS: return tacJoin(code[0],tacCreate(TAC_MOVE,ast->symbol,code[0]?code[0]->res:0,0));
         case AST_ADD: return makeBinOperation(TAC_ADD, code[0], code[1]);
+        case AST_SUB: return makeBinOperation(TAC_SUB, code[0], code[1]);
+        case AST_MUL: return makeBinOperation(TAC_MUL, code[0], code[1]);
+        case AST_DIV: return makeBinOperation(TAC_DIV, code[0], code[1]);
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
 }

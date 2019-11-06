@@ -4,5 +4,5 @@ int k = 6667;
 
 int func( int a )
 {
-  y = 1+x+2;
+  y = 1+x/2*3-2;
 }
