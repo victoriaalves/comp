@@ -2,6 +2,8 @@
 #include "hash.h"
 #include "astree.h"
 
+#include <string.h>
+
 extern AST*getAST();
 
 int semanticErrors = 0;

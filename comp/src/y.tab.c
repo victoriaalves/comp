@@ -1842,7 +1842,7 @@ yyreduce:
 
   case 65:
 #line 195 "parser.y"
-    {(yyval.ast)=astreeCreate(AST_EXPEXP, (yyvsp[(1) - (4)].symbol), (yyvsp[(3) - (4)].ast), 0, 0, 0, getLineNumber());}
+    {(yyval.ast)=astreeCreate(AST_FUNCALL, (yyvsp[(1) - (4)].symbol), (yyvsp[(3) - (4)].ast), 0, 0, 0, getLineNumber());}
     break;
 
   case 66:
