@@ -1,10 +1,12 @@
 %{
   #include <stdio.h>
   #include <stdlib.h>
+
   #include "lex.yy.h"
   #include "hash.h"
   #include "astree.h"
   #include "semantic.h"
+  #include "tac.h"
 
   int yylex();
   int yyerror(char *message);
@@ -84,6 +86,7 @@
 
 programa: ldecl                                                 {root = $1;
                                                                 astreePrint($1, 0);
+                                                                tacPrintBackwards(generateCode($1));
                                                                 }
   ;
 
