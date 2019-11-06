@@ -22,7 +22,7 @@
 #define AST_LPARAM 15
 #define AST_BLOCK 16
 #define AST_LPRINT 17
-#define AST_ID 18
+#define AST_ASS 18
 #define AST_VECEXP 19
 #define AST_READID 20
 #define AST_READINIT 21

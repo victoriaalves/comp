@@ -152,7 +152,7 @@ printLista: LIT_STRING printLista                               {$$=astreeCreate
   |                                                             {$$=0;}
   ;
 
-cmdSimples: TK_IDENTIFIER '=' exp                               {$$=astreeCreate(AST_ID, $1, $3, 0, 0, 0, getLineNumber());}
+cmdSimples: TK_IDENTIFIER '=' exp                               {$$=astreeCreate(AST_ASS, $1, $3, 0, 0, 0, getLineNumber());}
   | TK_IDENTIFIER '[' exp ']' '=' exp                           {$$=astreeCreate(AST_VECEXP, $1, $3, $6, 0, 0, getLineNumber());}
   | KW_READ TK_IDENTIFIER                                       {$$=astreeCreate(AST_READID, 0, astreeCreate(AST_SYMBOL, $2, 0, 0, 0, 0, getLineNumber()), 0, 0, 0, getLineNumber());}
   | KW_READ init                                                {$$=astreeCreate(AST_READINIT, 0, $2, 0, 0, 0, getLineNumber());}

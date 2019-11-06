@@ -1,5 +1,7 @@
 #import "tac.h"
 
+//TAC* makeBinOp(int type, TAC* code0, TAC* code1);
+
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
     newTac = (TAC*) calloc(1, sizeof(TAC));
@@ -24,12 +26,11 @@ TAC* generateCode(AST *ast){
 
     // then itself
     switch(ast->type){
-        case AST_SYMBOL:
-            return tacCreate(TAC_SYMBOL, ast->symbol, 0, 0);
-            break;
-        default:
-            return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
-            break;
+        case AST_SYMBOL: return tacCreate(TAC_SYMBOL, ast->symbol, 0, 0);
+        case AST_ASS: return tacJoin(code[0],tacCreate(TAC_MOVE,ast->symbol,code[0]?code[0]->res:0,0));
+        case AST_ADD: return tacJoin(tacJoin(code[0],code[1]), tacCreate(TAC_ADD,makeTemp(),code[0]?code[0]->res:0,code[1]?code[1]->res:0));
+        //case AST_ADD: return
+        default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
 }
 
@@ -47,6 +48,7 @@ TAC* tacJoin(TAC* l1, TAC* l2){
 
 void tacPrintSingle(TAC *tac){
     if(!tac) return;
+    if(tac->type == TAC_SYMBOL) return; // not interested
 
     fprintf(stderr, "TAC(");
     switch(tac->type){
@@ -72,4 +74,14 @@ void tacPrintSingle(TAC *tac){
 void tacPrintBackwards(TAC *tac){
     for(;tac; tac = tac->prev)
         tacPrintSingle(tac);
+}
+
+TAC* makeBinOp(int type, TAC* code0, TAC* code1){
+  TAC *list = 0;
+  TAC *novatac = 0;
+
+  novatac = tacCreate(type,makeTemp(),code0?code0->res:0,code1?code1->res:0);
+  list = tacJoin(code0, code1);
+  novatac->prev = list;
+  return novatac;
 }

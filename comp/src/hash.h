@@ -43,6 +43,8 @@ void hashPrint(void);
 
 int hashCheckUndeclared(void);
 
+HASH_NODE * makeTemp();
+
 #endif
 //END
 
