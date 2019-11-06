@@ -30,7 +30,4 @@ void tacPrintBackwards(TAC *tac);
 TAC* generateCode(AST *ast);
 TAC* tacJoin(TAC* tac1, TAC* tac2);
 
-TAC* makeBinOp(int type, TAC* code0, TAC* code1);
-//TAC* makeBinOp(int type, TAC* code[]);
-
 #endif
