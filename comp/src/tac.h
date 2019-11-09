@@ -21,7 +21,7 @@
 #define TAC_LE      15
 #define TAC_EQ      16
 #define TAC_DIF     17
-// #define TAC_
+#define TAC_JUMP    18
 // #define TAC_
 // #define TAC_
 // #define TAC_

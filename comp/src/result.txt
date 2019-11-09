@@ -1,9 +1,14 @@
 int x =  10 ;
-int y =  20 ;
-int k =  6667 ;
-int func(int a){
-x =  100 ;
-if( a  <  0 ) then 
+int a =  100 ;
+int main(int x){
+if( x ) then 
 {
-y =  1  +  x  *  7  -  2 ;
+x =  1 ;
+}else
+{
+x =  2 ;
+}}int test(int a){
+if( a ) then 
+{
+a =  1 ;
 }}

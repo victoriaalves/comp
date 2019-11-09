@@ -2,6 +2,7 @@
 
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
+TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
 
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
@@ -44,6 +45,7 @@ TAC* generateCode(AST *ast){
 		case AST_DIF: return makeBinOperation(TAC_DIF, code[0], code[1]);
 
         case AST_IF: return makeIfThen(code[0], code[1]);
+        case AST_IFELSE: return makeIfThenElse(code[0], code[1]), code[2]);
 
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
@@ -69,6 +71,27 @@ TAC* makeIfThen(TAC* code0, TAC* code1){
   taclabel = tacCreate(TAC_LABEL, label, 0, 0);
 
   return tacJoin(tacJoin(tacJoin(code0, tacif), code1), taclabel);
+}
+
+TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2){
+	TAC* iftac = 0;
+	TAC* labeltac1 = 0;
+	TAC* labeltac2 = 0;
+	TAC* jump = 0;
+
+	HASH_NODE* newlabel1 = 0;
+	HASH_NODE* newlabel2 = 0;
+
+	newlabel1 = makeLabel();
+	newlabel2 = makeLabel();
+
+	iftac = tacCreate(TAC_IFZ,newlabel1,code0?code0->res:0,0);
+	labeltac1 = tacCreate(TAC_LABEL,newlabel1,0,0);
+	labeltac2 = tacCreate(TAC_LABEL,newlabel2,0,0);
+
+	jump = tacCreate(TAC_JUMP,newlabel2,0,0);
+
+	return tacJoin(tacJoin(tacJoin(tacJoin(tacJoin(tacJoin(code0,iftac),code1),jump),labeltac1),code2),labeltac2);
 }
 
 TAC* tacJoin(TAC* l1, TAC* l2){
@@ -99,13 +122,14 @@ void tacPrintSingle(TAC *tac){
         case TAC_LABEL: fprintf(stderr, "TAC_MOVE"); break;
         case TAC_GREATER: fprintf(stderr, "TAC_GREATER"); break;
         case TAC_SMALLER: fprintf(stderr, "TAC_SMALLER"); break;
-        case AST_AND: fprintf(stderr, "AST_AND"); break;
-        case AST_OR: fprintf(stderr, "AST_OR"); break;
-        case AST_NOT: fprintf(stderr, "AST_NOT"); break;
-        case AST_GE: fprintf(stderr, "AST_GE"); break;
-        case AST_LE: fprintf(stderr, "AST_LE"); break;
-        case AST_EQ: fprintf(stderr, "AST_EQ"); break;
-        case AST_DIF: fprintf(stderr, "AST_DIF"); break;
+        case TAC_AND: fprintf(stderr, "TAC_AND"); break;
+        case TAC_OR: fprintf(stderr, "TAC_OR"); break;
+        case TAC_NOT: fprintf(stderr, "TAC_NOT"); break;
+        case TAC_GE: fprintf(stderr, "TAC_GE"); break;
+        case TAC_LE: fprintf(stderr, "TAC_LE"); break;
+        case TAC_EQ: fprintf(stderr, "TAC_EQ"); break;
+        case TAC_DIF: fprintf(stderr, "TAC_DIF"); break;
+        case TAC_JUMP: fprintf(stderr, "TAC_JUMP"); break;
         default: fprintf(stderr, "UNKNOWN TAC TYPE"); break;
     }
 
