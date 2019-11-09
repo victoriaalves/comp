@@ -33,7 +33,15 @@ TAC* generateCode(AST *ast){
         case AST_SUB: return makeBinOperation(TAC_SUB, code[0], code[1]);
         case AST_MUL: return makeBinOperation(TAC_MUL, code[0], code[1]);
         case AST_DIV: return makeBinOperation(TAC_DIV, code[0], code[1]);
-
+        case AST_GREATER: return makeBinOperation(TAC_GREATER, code[0], code[1]);
+		case AST_SMALLER: return makeBinOperation(TAC_SMALLER, code[0], code[1]);
+        case AST_AND: return makeBinOperation(TAC_AND, code[0], code[1]);
+		case AST_OR: return makeBinOperation(TAC_OR, code[0], code[1]);
+		case AST_NOT: return makeBinOperation(TAC_NOT, code[0], code[1]);
+		case AST_GE: return makeBinOperation(TAC_GE, code[0], code[1]);
+		case AST_LE: return makeBinOperation(TAC_LE, code[0], code[1]);
+        case AST_EQ: return makeBinOperation(TAC_EQ, code[0], code[1]);
+		case AST_DIF: return makeBinOperation(TAC_DIF, code[0], code[1]);
 
         case AST_IF: return makeIfThen(code[0], code[1]);
 
@@ -89,7 +97,16 @@ void tacPrintSingle(TAC *tac){
         case TAC_MOVE: fprintf(stderr, "TAC_MOVE"); break;
         case TAC_IFZ: fprintf(stderr, "TAC_MOVE"); break;
         case TAC_LABEL: fprintf(stderr, "TAC_MOVE"); break;
-        default: fprintf(stderr, "UNKNOWN"); break;
+        case TAC_GREATER: fprintf(stderr, "TAC_GREATER"); break;
+        case TAC_SMALLER: fprintf(stderr, "TAC_SMALLER"); break;
+        case AST_AND: fprintf(stderr, "AST_AND"); break;
+        case AST_OR: fprintf(stderr, "AST_OR"); break;
+        case AST_NOT: fprintf(stderr, "AST_NOT"); break;
+        case AST_GE: fprintf(stderr, "AST_GE"); break;
+        case AST_LE: fprintf(stderr, "AST_LE"); break;
+        case AST_EQ: fprintf(stderr, "AST_EQ"); break;
+        case AST_DIF: fprintf(stderr, "AST_DIF"); break;
+        default: fprintf(stderr, "UNKNOWN TAC TYPE"); break;
     }
 
     if(tac->res) fprintf(stderr, ", %s", tac->res->text);

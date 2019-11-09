@@ -5,7 +5,7 @@ int k = 6667;
 int func( int a )
 {
   x = 100;
-  if (a) then
+  if (a < 0) then
   {
     y = 1 + x * 7 - 2;
   }
