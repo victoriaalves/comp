@@ -23,7 +23,8 @@
 #define TAC_DIF     17
 #define TAC_JUMP    18
 #define TAC_PRINT   19
-// #define TAC_
+#define TAC_RET     20
+#define TAC_READ    21
 // #define TAC_
 // #define TAC_
 // #define TAC_
