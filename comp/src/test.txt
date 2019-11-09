@@ -1,5 +1,6 @@
 int x = 10;
 int a = 100;
+int b = 1000;
 
 int main( int x )
 {
@@ -18,5 +19,14 @@ int test( int a )
   if (a) then
   {
     a = 1;
+  }
+}
+
+int test2( int b )
+{
+  while(b > 1000)
+  {
+    b = 3;
+    b = 4;
   }
 }

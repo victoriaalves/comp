@@ -1,5 +1,6 @@
 int x =  10 ;
 int a =  100 ;
+int b =  1000 ;
 int main(int x){
 if( x ) then 
 {
@@ -11,4 +12,8 @@ x =  2 ;
 if( a ) then 
 {
 a =  1 ;
+}}int eu(int b){
+while( b  >  1000 ){
+b =  3 ;
+b =  4 ;
 }}
