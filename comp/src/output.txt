@@ -1,4 +1,0 @@
-int x =  10 ;
-int func(int a){
-a =  8  +  11  * a[ 2 ];
-};
