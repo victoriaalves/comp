@@ -48,6 +48,8 @@ TAC* generateCode(AST *ast){
         case AST_IF: return makeIfThen(code[0], code[1]);
         case AST_IFELSE: return makeIfThenElse(code[0], code[1], code[2]);
         case AST_WHILE: return makeWhile(code[0], code[1]);
+        case AST_LPRINT:
+		case AST_EXPPRINT: return tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT,code[0]?code[0]->res:0,0,0)), code[1]);
 
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
@@ -152,6 +154,7 @@ void tacPrintSingle(TAC *tac){
         case TAC_EQ: fprintf(stderr, "TAC_EQ"); break;
         case TAC_DIF: fprintf(stderr, "TAC_DIF"); break;
         case TAC_JUMP: fprintf(stderr, "TAC_JUMP"); break;
+        case TAC_PRINT: fprintf(stderr, "TAC_PRINT"); break;
         default: fprintf(stderr, "UNKNOWN TAC TYPE"); break;
     }
 

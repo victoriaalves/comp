@@ -11,9 +11,5 @@ x =  2 ;
 }}int test(int a){
 if( a ) then 
 {
-a =  1 ;
-}}int eu(int b){
-while( b  >  1000 ){
-b =  3 ;
-b =  4 ;
+print  a ;
 }}
