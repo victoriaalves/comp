@@ -5,6 +5,9 @@ TAC* makeIfThen(TAC* code0, TAC* code1);
 TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
 TAC* makeWhile(TAC* code0, TAC* code1);
 TAC* makeFunc(TAC* code0, TAC* code1, TAC* code2);
+TAC* makeFor(TAC* code0, TAC* code1, TAC* code2, TAC* code3, TAC* code4, HASH_NODE* label);
+TAC* makeExp(TAC* code);
+TAC* makeReturn(TAC* code0);
 
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
@@ -19,14 +22,17 @@ TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     return newTac;
 }
 
-TAC* generateCode(AST *ast){
+TAC* generateCode(AST *ast, HASH_NODE* label){
     if(!ast) return 0;
 
     TAC* code[MAX_SONS];
 
+    if(ast->type == AST_WHILE || ast->type == AST_FOR)
+        label = makeLabel();
+
     // generateCode for children first
     for(int i = 0; i < MAX_SONS; i++)
-        code[i] = generateCode(ast->son[i]);
+        code[i] = generateCode(ast->son[i], label);
 
     // then itself
     switch(ast->type){
@@ -50,7 +56,6 @@ TAC* generateCode(AST *ast){
         case AST_WHILE: return makeWhile(code[0], code[1]);
         case AST_LPRINT:
 		case AST_EXPPRINT: return tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT,code[0]?code[0]->res:0,0,0)), code[1]);
-        case AST_RET: return tacJoin(code[0], tacCreate(TAC_RET, code[0]?code[0]->res:0,0,0));
         case AST_READID:
         case AST_READINIT: return tacCreate(TAC_READ, ast->symbol,0,0);
         case AST_VECEXP: return tacJoin(code[0], tacJoin(code[1], tacCreate(TAC_VECEXP, ast->symbol, code[0]?code[0]->res:0, code[1]?code[1]->res:0)));
@@ -60,6 +65,8 @@ TAC* generateCode(AST *ast){
         case AST_RESTO: return code[0];
         case AST_PARAM: return tacJoin(tacCreate(TAC_PARAMPOP, ast->symbol, 0, 0), code[1]);
         case AST_FUNC:return makeFunc(tacCreate(TAC_SYMBOL, ast->symbol, 0, 0), code[1], code[2]);
+        case AST_FOR: return makeFor(tacCreate(TAC_SYMBOL, ast->symbol, 0, 0), code[0], code[1], code[2], code[3], label);
+        case AST_RET: return makeReturn(code[0]);
 
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
@@ -137,6 +144,30 @@ TAC* makeFunc(TAC* symbol, TAC* params, TAC* code){
             tacCreate(TAC_ENDFUN, symbol->res, 0, 0));
 }
 
+TAC* makeFor(TAC* symbol, TAC* exp1, TAC* exp2, TAC* exp3, TAC* cmd, HASH_NODE* forLabel){
+
+    HASH_NODE* jumpLabel = makeLabel();
+
+    TAC* forTac = tacJoin(tacJoin(tacJoin(tacCreate(TAC_IFZ, jumpLabel, symbol? symbol->res : 0, 0),exp1),exp2),exp3);
+
+    TAC* forTacLabel = tacCreate(TAC_LABEL, forLabel, 0, 0);
+
+    TAC* jumpTac = tacCreate(TAC_JUMP, forLabel, 0, 0);
+    TAC* jumpTacLabel = tacCreate(TAC_LABEL, jumpLabel, 0, 0);
+
+    return tacJoin(tacJoin(tacJoin(tacJoin(tacJoin(forTacLabel, forTac),symbol),cmd),jumpTac),jumpTacLabel);
+}
+
+TAC* makeExp(TAC* code){
+    return tacCreate(TAC_EXP, code?code->res:0, 0, 0);
+}
+
+TAC* makeReturn(TAC* code0){
+	TAC* ret = 0;
+	ret = tacCreate(TAC_RETURN,code0?code0->res:0,0,0);
+	return tacJoin(code0,ret);
+}
+
 TAC* tacJoin(TAC* l1, TAC* l2){
     TAC* t;
 	if(!l1) return l2;
@@ -174,7 +205,6 @@ void tacPrintSingle(TAC *tac){
         case TAC_DIF: fprintf(stderr, "TAC_DIF"); break;
         case TAC_JUMP: fprintf(stderr, "TAC_JUMP"); break;
         case TAC_PRINT: fprintf(stderr, "TAC_PRINT"); break;
-        case TAC_RET: fprintf(stderr, "TAC_RET"); break;
         case TAC_READ: fprintf(stderr, "TAC_READ"); break;
         case TAC_VEC: fprintf(stderr, "TAC_VEC"); break;
         case TAC_VECEXP: fprintf(stderr, "TAC_VECEXP"); break;
@@ -185,6 +215,9 @@ void tacPrintSingle(TAC *tac){
         case TAC_PARAMPOP: fprintf(stderr, "TAC_PARAMPOP"); break;
         case TAC_FOR: fprintf(stderr, "TAC_PARAMPOP"); break;
         case TAC_BREAK: fprintf(stderr, "TAC_BREAK"); break;
+        case TAC_JUMPFOR: fprintf(stderr, "TAC_JUMPFOR"); break;
+        case TAC_EXP: fprintf(stderr, "TAC_EXP"); break;
+        case TAC_RETURN: fprintf(stderr, "TAC_RETURN"); break;
         default: fprintf(stderr, "UNKNOWN TAC TYPE"); break;
     }
 

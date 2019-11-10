@@ -1539,7 +1539,7 @@ yyreduce:
 #line 87 "parser.y"
     {root = (yyvsp[(1) - (1)].ast);
                                                                 astreePrint((yyvsp[(1) - (1)].ast), 0);
-                                                                tacPrintBackwards(generateCode((yyvsp[(1) - (1)].ast)));
+                                                                tacPrintBackwards(generateCode((yyvsp[(1) - (1)].ast),0));
                                                                 }
     break;
 
