@@ -4,6 +4,7 @@ TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
 TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
 TAC* makeWhile(TAC* code0, TAC* code1);
+TAC* makeFunc(TAC* code0, TAC* code1, TAC* code2);
 
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
     TAC* newTac;
@@ -44,13 +45,21 @@ TAC* generateCode(AST *ast){
 		case AST_LE: return makeBinOperation(TAC_LE, code[0], code[1]);
         case AST_EQ: return makeBinOperation(TAC_EQ, code[0], code[1]);
 		case AST_DIF: return makeBinOperation(TAC_DIF, code[0], code[1]);
-
         case AST_IF: return makeIfThen(code[0], code[1]);
         case AST_IFELSE: return makeIfThenElse(code[0], code[1], code[2]);
         case AST_WHILE: return makeWhile(code[0], code[1]);
         case AST_LPRINT:
 		case AST_EXPPRINT: return tacJoin(tacJoin(code[0], tacCreate(TAC_PRINT,code[0]?code[0]->res:0,0,0)), code[1]);
         case AST_RET: return tacJoin(code[0], tacCreate(TAC_RET, code[0]?code[0]->res:0,0,0));
+        case AST_READID:
+        case AST_READINIT: return tacCreate(TAC_READ, ast->symbol,0,0);
+        case AST_VECEXP: return tacJoin(code[0], tacJoin(code[1], tacCreate(TAC_VECEXP, ast->symbol, code[0]?code[0]->res:0, code[1]?code[1]->res:0)));
+        case AST_EXPARRAY: return tacJoin(code[0], tacCreate(TAC_VEC, makeTemp(), ast->symbol, code[0]?code[0]->res:0));
+        case AST_FUNCALL: return tacJoin(code[0], tacCreate(TAC_FUNCCALL, makeTemp(), ast->symbol, 0));
+        case AST_LPARAM: return tacJoin(code[1], tacJoin(code[0], tacCreate(TAC_ARGPUSH, code[0]?code[0]->res:0, 0, 0)));
+        case AST_RESTO: return code[0];
+        case AST_PARAM: return tacJoin(tacCreate(TAC_PARAMPOP, ast->symbol, 0, 0), code[1]);
+        case AST_FUNC:return makeFunc(tacCreate(TAC_SYMBOL, ast->symbol, 0, 0), code[1], code[2]);
 
         default: return tacJoin(tacJoin(tacJoin(code[0], code[1]), code[2]), code[3]);
     }
@@ -119,6 +128,15 @@ TAC* makeWhile(TAC* code0, TAC* code1){
 	return tacJoin(tacJoin(tacJoin(tacJoin(tacJoin(labeltac1,code0),iftac),code1),jump),labeltac2);
 }
 
+TAC* makeFunc(TAC* symbol, TAC* params, TAC* code){
+    return tacJoin
+            (tacJoin
+                (tacJoin
+                    (tacCreate
+                        (TAC_BEGINFUN, symbol->res, 0, 0), params), code),
+            tacCreate(TAC_ENDFUN, symbol->res, 0, 0));
+}
+
 TAC* tacJoin(TAC* l1, TAC* l2){
     TAC* t;
 	if(!l1) return l2;
@@ -158,6 +176,15 @@ void tacPrintSingle(TAC *tac){
         case TAC_PRINT: fprintf(stderr, "TAC_PRINT"); break;
         case TAC_RET: fprintf(stderr, "TAC_RET"); break;
         case TAC_READ: fprintf(stderr, "TAC_READ"); break;
+        case TAC_VEC: fprintf(stderr, "TAC_VEC"); break;
+        case TAC_VECEXP: fprintf(stderr, "TAC_VECEXP"); break;
+        case TAC_BEGINFUN: fprintf(stderr, "TAC_BEGINFUN"); break;
+        case TAC_ENDFUN: fprintf(stderr, "TAC_ENDFUN"); break;
+        case TAC_FUNCCALL: fprintf(stderr, "TAC_FUNCCALL"); break;
+        case TAC_ARGPUSH: fprintf(stderr, "TAC_ARGPUSH"); break;
+        case TAC_PARAMPOP: fprintf(stderr, "TAC_PARAMPOP"); break;
+        case TAC_FOR: fprintf(stderr, "TAC_PARAMPOP"); break;
+        case TAC_BREAK: fprintf(stderr, "TAC_BREAK"); break;
         default: fprintf(stderr, "UNKNOWN TAC TYPE"); break;
     }
 

@@ -1,23 +1,26 @@
 int x = 10;
 int a = 100;
 int b = 1000;
+int v1[3]: 1 2 2;
 
 int main( int x )
 {
-  if (x) then
-  {
-    x = 1;
-  }
-  else
-  {
-    x = 2;
+  while(100){
+    a = 0;
+    print "Testando" "1,2,3";
+    ###read 0; SEG FAULT###
   }
 }
 
-int test( int a )
-{
+int test( int a, int b ){
+  v1[a] = 2;
+
   if (a) then
   {
-    print a;
+    a = 1;
+  }
+  else
+  {
+    b = 1;
   }
 }
