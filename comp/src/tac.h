@@ -1,8 +1,8 @@
 #ifndef TAC_HEADER
 #define TAC_HEADER
 
-#import "hash.h"
-#import "astree.h"
+#include "hash.h"
+#include "astree.h"
 
 #define TAC_SYMBOL   1
 #define TAC_ADD      2

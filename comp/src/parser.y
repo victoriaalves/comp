@@ -6,7 +6,7 @@
   #include "hash.h"
   #include "astree.h"
   #include "semantic.h"
-  #include "tacs.h"
+  #include "tac.h"
 
   int yylex();
   int yyerror(char *message);

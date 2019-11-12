@@ -16,9 +16,6 @@ main.o: main.c
 astree.o: astree.c
 	gcc -ggdb -c astree.c -Wall
 
-tacs.o: tacs.c
-	gcc -c tacs.c
-
 lex.yy.c: scanner.l
 	lex --header-file=lex.yy.h scanner.l
 
