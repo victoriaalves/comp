@@ -27,8 +27,10 @@ TAC* generateCode(AST *ast, HASH_NODE* label){
 
   TAC* code[MAX_SONS];
 
-  if(ast->type == AST_WHILE || ast->type == AST_FOR)
+  if(ast->type == AST_WHILE || ast->type == AST_FOR
+      || ast->type == AST_IF || ast->type == AST_IFELSE) {
     label = makeLabel();
+  }
 
   // generateCode for children first
   for(int i = 0; i < MAX_SONS; i++)
@@ -177,11 +179,12 @@ TAC* tacJoin(TAC* l1, TAC* l2){
     t = t->prev;
   }
   t->prev = l1;
+  l1->next = t;
   return l2;
 }
 
 void tacPrintSingle(TAC *tac){
-  if(!tac) return;
+  if(!tac) { fprintf(stderr, "\nOPA\n"); return;}
   if(tac->type == TAC_SYMBOL) return; // not interested
 
   fprintf(stderr, "TAC(");
@@ -232,6 +235,10 @@ void tacPrintSingle(TAC *tac){
 }
 
 void tacPrintBackwards(TAC *tac){
-  for(;tac; tac = tac->prev)
+  while(tac->prev != NULL) {
+    tac = tac->prev;
+  }
+
+  for(;tac; tac = tac->next)
     tacPrintSingle(tac);
 }
