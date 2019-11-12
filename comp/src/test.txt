@@ -1,14 +1,28 @@
 int x = 10;
-int y = 20;
-int k = 6667;
-float k = 6667;
+int a = 100;
+int b = 1000;
+int v1[3]: 1 2 2;
 
-int func ( int a )
+int main( int x )
 {
-  a=8+11*a[2];
+  for (x:1,10,1)
+    print "hello";
+  while(100){
+    a = 0;
+    print "Testando" "1,2,3";
+    ###read 0; SEG FAULT###
+  }
 }
 
-int k ()
-{
-  teste = 2;
+int test( int a, int b ){
+  v1[a] = 2;
+
+  if (a) then
+  {
+    a = 1;
+  }
+  else
+  {
+    b = 1;
+  }
 }

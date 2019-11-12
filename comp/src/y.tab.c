@@ -133,7 +133,11 @@
   #include "hash.h"
   #include "astree.h"
   #include "semantic.h"
+<<<<<<< HEAD
   #include "tacs.h"
+=======
+  #include "tac.h"
+>>>>>>> b9225d998a90cba9f059ee516e247685eafeef48
 
   int yylex();
   int yyerror(char *message);
@@ -1539,7 +1543,11 @@ yyreduce:
 #line 87 "parser.y"
     {root = (yyvsp[(1) - (1)].ast);
                                                                 astreePrint((yyvsp[(1) - (1)].ast), 0);
+<<<<<<< HEAD
 
+=======
+                                                                tacPrintBackwards(generateCode((yyvsp[(1) - (1)].ast),0));
+>>>>>>> b9225d998a90cba9f059ee516e247685eafeef48
                                                                 }
     break;
 
@@ -1700,7 +1708,11 @@ yyreduce:
 
   case 36:
 #line 155 "parser.y"
+<<<<<<< HEAD
     {(yyval.ast)=astreeCreate(AST_ID, (yyvsp[(1) - (3)].symbol), (yyvsp[(3) - (3)].ast), 0, 0, 0, getLineNumber());}
+=======
+    {(yyval.ast)=astreeCreate(AST_ASS, (yyvsp[(1) - (3)].symbol), (yyvsp[(3) - (3)].ast), 0, 0, 0, getLineNumber());}
+>>>>>>> b9225d998a90cba9f059ee516e247685eafeef48
     break;
 
   case 37:

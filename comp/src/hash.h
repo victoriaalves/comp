@@ -16,6 +16,7 @@
 #define SYMBOL_VEC 101
 #define SYMBOL_FUNC 102
 #define SYMBOL_PARAM 103
+#define SYMBOL_LABEL 104
 
 #define DATATYPE_BYTE 500
 #define DATATYPE_INT 501
@@ -43,6 +44,9 @@ HASH_NODE *hashInsert(char *text, int type);
 void hashPrint(void);
 
 int hashCheckUndeclared(void);
+
+HASH_NODE * makeTemp(void);
+HASH_NODE * makeLabel(void);
 
 #endif
 //END
