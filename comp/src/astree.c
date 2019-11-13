@@ -216,10 +216,13 @@ void uncompileAST(AST *node, FILE *file){
             break;
 
         case AST_READID:
+            fprintf(stderr, "teste\n");
             fprintf(file, "read %s", node->symbol->text);
             break;
 
         case AST_READINIT:
+            fprintf(stderr, "teste2\n");
+            fprintf(stderr, "text: %d\n", node->type);
             fprintf(file, "read %s", node->symbol->text);
             break;
 

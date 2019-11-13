@@ -41,15 +41,16 @@ int main(int argc, char **argv)
 
   initMe();
   yyparse();
-  //hashPrint();
+  hashPrint();
 
   fprintf(stderr, "Compiled Successfully.\n");
 
   fprintf(stderr, "Uncompiling!\n");
 
   uncompileAST(getAST(), out);
-  checkSemantic();
+ // checkSemantic();
 
+  fprintf(stderr, "ops\n");
   fclose(out);
 
   exit(0);

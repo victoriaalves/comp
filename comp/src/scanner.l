@@ -48,13 +48,13 @@ int running = 1;
 <COMMENT>"\n"									++lineNumber;
 <COMMENT>.
 
-[A-Za-z_][A-Za-z_0-9]*				{yylval.symbol = hashInsert(yytext, SYMBOL_IDENTIFIER); return TK_IDENTIFIER;}
-[0-9]+ 												{yylval.symbol = hashInsert(yytext, SYMBOL_LIT_INT); return LIT_INTEGER;}
-[0-9]*\.[0-9]+ 								{yylval.symbol = hashInsert(yytext, SYMBOL_LIT_FLOAT); return LIT_FLOAT; }
-[0-9]+\.[0-9]* 								{yylval.symbol = hashInsert(yytext, SYMBOL_LIT_FLOAT); return LIT_FLOAT; }
+[A-Za-z_][A-Za-z_0-9]*				{yylval.symbol = hashInsert(yytext, TK_IDENTIFIER); return TK_IDENTIFIER;}
+[0-9]+ 												{yylval.symbol = hashInsert(yytext, LIT_INTEGER); return LIT_INTEGER;}
+[0-9]*\.[0-9]+ 								{yylval.symbol = hashInsert(yytext, LIT_FLOAT); return LIT_FLOAT; }
+[0-9]+\.[0-9]* 								{yylval.symbol = hashInsert(yytext, LIT_FLOAT); return LIT_FLOAT; }
 
-\'([^'\\\n]?|\\.)\'           {yylval.symbol = hashInsert(yytext, SYMBOL_LIT_CHAR); return LIT_CHAR;}
-\"([^\"\\\n]|\\.)*\"          {yylval.symbol = hashInsert(yytext, SYMBOL_LIT_STRING); return LIT_STRING;}
+\'([^'\\\n]?|\\.)\'           {yylval.symbol = hashInsert(yytext, LIT_CHAR); return LIT_CHAR;}
+\"([^\"\\\n]|\\.)*\"          {yylval.symbol = hashInsert(yytext, LIT_STRING); return LIT_STRING;}
 
 %%
 
