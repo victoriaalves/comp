@@ -30,8 +30,6 @@
 #define TAC_BEGINFUN 24
 #define TAC_ENDFUN   25
 #define TAC_FUNCCALL 26
-#define TAC_ARGPUSH  27
-#define TAC_PARAMPOP 28
 #define TAC_FOR      29
 #define TAC_BREAK    30
 #define TAC_JUMPFOR  31
@@ -50,7 +48,7 @@ typedef struct tac_node{
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2);
 void tacPrintSingle(TAC *tac);
 void tacPrintBackwards(TAC *tac);
-TAC* generateCode(AST *ast, HASH_NODE* label);
+TAC* generateCode(AST *ast, HASH_NODE* label, HASH_NODE* labelJump);
 TAC* tacJoin(TAC* tac1, TAC* tac2);
 
 #endif
