@@ -184,7 +184,7 @@ TAC* tacJoin(TAC* l1, TAC* l2){
 }
 
 void tacPrintSingle(TAC *tac){
-  if(!tac) { fprintf(stderr, "\nOPA\n"); return;}
+  if(!tac) return;
   if(tac->type == TAC_SYMBOL) return; // not interested
 
   fprintf(stderr, "TAC(");
@@ -195,8 +195,8 @@ void tacPrintSingle(TAC *tac){
     case TAC_MUL: fprintf(stderr, "TAC_MUL"); break;
     case TAC_DIV: fprintf(stderr, "TAC_DIV"); break;
     case TAC_MOVE: fprintf(stderr, "TAC_MOVE"); break;
-    case TAC_IFZ: fprintf(stderr, "TAC_MOVE"); break;
-    case TAC_LABEL: fprintf(stderr, "TAC_MOVE"); break;
+    case TAC_IFZ: fprintf(stderr, "TAC_IFZ"); break;
+    case TAC_LABEL: fprintf(stderr, "TAC_LABEL"); break;
     case TAC_GREATER: fprintf(stderr, "TAC_GREATER"); break;
     case TAC_SMALLER: fprintf(stderr, "TAC_SMALLER"); break;
     case TAC_AND: fprintf(stderr, "TAC_AND"); break;
