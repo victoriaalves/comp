@@ -235,14 +235,16 @@ void tacPrintBackwards(TAC *tac){
     tacPrintSingle(tac);
 }
 
-void createASM(TAC *tac) {
-  FILE *out = fopen("asm.c", "w");
+void createASM(AST *ast, TAC *tac) {
+  FILE *out = fopen("asm.s", "w");
 
   if (!tac) return;
 
   if (tac->prev)
-    createASM(tac->prev);
+    createASM(ast, tac->prev);
 
+  // primeira parte do assembly possui as variáveis
+  addData(ast, out);
 
   switch(tac->type) {
     case TAC_ADD:
@@ -251,5 +253,35 @@ void createASM(TAC *tac) {
 
   }
 
+  fclose(out);
+
+}
+
+
+void addData(AST *ast, FILE *out) {
+  // nos interessa: AST_VARDEC, AST_SYMBOL (só quando), AST_VEC
+  // no nosso caso, parâmetros não são considerados variáveis globais, então a
+  // gente não precisa considerar elas aqui
+
+  if(!ast) return;
+  if(ast->type == AST_VARDEC) {
+    // teoricamente haveria um .data logo após a o primeiro .globl, porém
+    // tirando ele não dá erro então nem vou booltar kk
+    fprintf(out, ".globl  %s\n"
+      ".align 4\n"
+      ".type   %s, @object\n"
+      ".size   %s, 4\n"
+      "%s:\n"
+      ".long   %s\n",
+      ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->son[1]->symbol->text);
+  }
+  else if (ast->type == AST_SYMBOL) {
+  }
+  else if (ast->type == AST_VEC) {
+  }
+
+  for(int i = 0; i < MAX_SONS; i++){
+    addData(ast->son[i], out);
+  }
 
 }

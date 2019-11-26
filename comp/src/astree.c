@@ -1,4 +1,3 @@
-
 #include "astree.h"
 
 AST *astreeCreate(int type, HASH_NODE *symbol, AST *s0, AST *s1, AST *s2, AST *s3, int line){

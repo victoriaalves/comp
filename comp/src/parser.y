@@ -13,6 +13,7 @@
   extern int getLineNumber();
 
   AST *root;
+  TAC *tac_root;
 
 %}
 
@@ -86,8 +87,9 @@
 
 programa: ldecl                                                 {root = $1;
                                                                 astreePrint($1, 0);
-                                                                tacPrintBackwards(generateCode($1,0,0));
-                                                                createASM($1);
+                                                                tac_root = generateCode($1,0,0);
+                                                                tacPrintBackwards(tac_root);
+                                                                createASM($1, tac_root);
                                                                 }
   ;
 
