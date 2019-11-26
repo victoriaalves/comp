@@ -87,6 +87,7 @@
 programa: ldecl                                                 {root = $1;
                                                                 astreePrint($1, 0);
                                                                 tacPrintBackwards(generateCode($1,0,0));
+                                                                createASM($1);
                                                                 }
   ;
 

@@ -234,3 +234,22 @@ void tacPrintBackwards(TAC *tac){
   for(;tac; tac = tac->next)
     tacPrintSingle(tac);
 }
+
+void createASM(TAC *tac) {
+  FILE *out = fopen("asm.c", "w");
+
+  if (!tac) return;
+
+  if (tac->prev)
+    createASM(tac->prev);
+
+
+  switch(tac->type) {
+    case TAC_ADD:
+
+    break;
+
+  }
+
+
+}
