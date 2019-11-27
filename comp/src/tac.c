@@ -245,6 +245,7 @@ void createASM(AST *ast, TAC *tac) {
 
   // primeira parte do assembly possui as variáveis
   addData(ast, out);
+  fprintf(out, ".section\t.rodata\n");
 
   switch(tac->type) {
     case TAC_ADD:
@@ -278,6 +279,18 @@ void addData(AST *ast, FILE *out) {
   else if (ast->type == AST_SYMBOL) {
   }
   else if (ast->type == AST_VEC) {
+    // o vetor bota como segundo argumento o tamanho em bytes.
+    // Por ex: int vec[10]
+    // vai ter como segundo argumento 40, que são 10 * 4 (bytes to int)
+    int numBytes = atoi(ast->son[1]->symbol->text);
+    if (ast->son[0]->type == AST_INT || ast->son[0]->type == AST_FLOAT)
+      numBytes = numBytes * 4;
+    if (ast->son[0]->type == AST_LONG)
+      numBytes = numBytes * 8;
+
+    fprintf(out, ".comm %s,%d,32\n",
+        ast->symbol->text, numBytes);
+
   }
 
   for(int i = 0; i < MAX_SONS; i++){
