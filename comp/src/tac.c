@@ -1,5 +1,7 @@
 #include "tac.h"
 
+int rodata = 0;
+
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
 TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
@@ -245,7 +247,6 @@ void createASM(AST *ast, TAC *tac) {
 
   // primeira parte do assembly possui as variáveis
   addData(ast, out);
-  fprintf(out, ".section\t.rodata\n");
 
   switch(tac->type) {
     case TAC_ADD:
@@ -260,9 +261,11 @@ void createASM(AST *ast, TAC *tac) {
 
 
 void addData(AST *ast, FILE *out) {
-  // nos interessa: AST_VARDEC, AST_SYMBOL (só quando), AST_VEC
+  // nos interessa: AST_VARDEC, AST_SYMBOL (só quando prrint), AST_VEC
   // no nosso caso, parâmetros não são considerados variáveis globais, então a
   // gente não precisa considerar elas aqui
+
+  static int LC = 0;
 
   if(!ast) return;
   if(ast->type == AST_VARDEC) {
@@ -276,8 +279,6 @@ void addData(AST *ast, FILE *out) {
       ".long   %s\n",
       ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->son[1]->symbol->text);
   }
-  else if (ast->type == AST_SYMBOL) {
-  }
   else if (ast->type == AST_VEC) {
     // o vetor bota como segundo argumento o tamanho em bytes.
     // Por ex: int vec[10]
@@ -288,9 +289,33 @@ void addData(AST *ast, FILE *out) {
     if (ast->son[0]->type == AST_LONG)
       numBytes = numBytes * 8;
 
-    fprintf(out, ".comm %s,%d,32\n",
-        ast->symbol->text, numBytes);
+    // caso o array tenha sido inicializado
+    if (ast->son[2]) {
+      fprintf(out, ".globl\t%s\n"
+          ".align 32\n"
+          ".type %s, @object\n"
+          ".size %s, %d\n"
+          "%s:\n",
+        ast->symbol->text, ast->symbol->text, ast->symbol->text, numBytes, ast->symbol->text);
 
+      // cria a lista de valores do array
+      AST *array = ast->son[2];
+      while (array) {
+        fprintf(out, ".quad %s\n",
+            array->son[0]->symbol->text);
+        array = array->son[1];
+      }
+    }
+    else {
+      fprintf(out, ".comm %s,%d,32\n",
+          ast->symbol->text, numBytes);
+    }
+  }
+  else if (ast->type == AST_LPRINT) {
+    fprintf(out, ".LC%d:\n"
+        ".string %s\n",
+        LC, ast->symbol->text);
+    LC++;
   }
 
   for(int i = 0; i < MAX_SONS; i++){

@@ -16,3 +16,17 @@ a:
 .size   b, 4
 b:
 .long   1000
+.globl	v1
+.align 32
+.type v1, @object
+.size v1, 12
+v1:
+.quad 1
+.quad 2
+.quad 2
+.LC126:
+.string "hello"
+.LC127:
+.string "Testando"
+.LC128:
+.string "1,2,3"
