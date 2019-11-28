@@ -1,7 +1,7 @@
 .globl  x
-.align 4
+.align 8
 .type   x, @object
-.size   x, 4
+.size   x, 8
 x:
 .long   10
 .globl  a
@@ -10,23 +10,10 @@ x:
 .size   a, 4
 a:
 .long   100
-.globl  b
-.align 4
-.type   b, @object
-.size   b, 4
-b:
-.long   1000
-.globl	v1
-.align 32
-.type v1, @object
-.size v1, 12
-v1:
-.quad 1
-.quad 2
-.quad 2
-.LC126:
+.comm v1,12,32
+.LC114:
 .string "hello"
-.LC127:
+.LC115:
 .string "Testando"
-.LC128:
+.LC116:
 .string "1,2,3"

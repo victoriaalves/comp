@@ -1,6 +1,8 @@
 #include "tac.h"
 
 int rodata = 0;
+int LC = 0;
+
 
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
@@ -265,19 +267,25 @@ void addData(AST *ast, FILE *out) {
   // no nosso caso, parâmetros não são considerados variáveis globais, então a
   // gente não precisa considerar elas aqui
 
-  static int LC = 0;
-
   if(!ast) return;
   if(ast->type == AST_VARDEC) {
+    int numBytes = 0;
+    if (ast->son[0]->type == AST_INT || ast->son[0]->type == AST_FLOAT)
+      numBytes = 4;
+    if (ast->son[0]->type == AST_LONG)
+      numBytes = 8;
+    if (ast->son[0]->type == AST_BYTE || ast->son[0]->type == AST_BOOL)
+      numBytes = 1;
+
     // teoricamente haveria um .data logo após a o primeiro .globl, porém
     // tirando ele não dá erro então nem vou booltar kk
     fprintf(out, ".globl  %s\n"
-      ".align 4\n"
+      ".align %d\n"
       ".type   %s, @object\n"
-      ".size   %s, 4\n"
+      ".size   %s, %d\n"
       "%s:\n"
       ".long   %s\n",
-      ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->symbol->text, ast->son[1]->symbol->text);
+      ast->symbol->text, numBytes, ast->symbol->text, ast->symbol->text, numBytes, ast->symbol->text, ast->son[1]->symbol->text);
   }
   else if (ast->type == AST_VEC) {
     // o vetor bota como segundo argumento o tamanho em bytes.
@@ -312,6 +320,7 @@ void addData(AST *ast, FILE *out) {
     }
   }
   else if (ast->type == AST_LPRINT) {
+    //printf("string: %s e LC: %d\n", ast->symbol->text, LC);
     fprintf(out, ".LC%d:\n"
         ".string %s\n",
         LC, ast->symbol->text);

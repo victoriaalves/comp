@@ -1,5 +1,5 @@
 etapa5: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o tac.o
-	gcc -ggdb -o etapa5 lex.yy.o main.o hash.o astree.o semantic.o tac.o -Wall
+	gcc -ggdb -o etapa6 lex.yy.o main.o hash.o astree.o semantic.o tac.o -Wall
 
 lex.yy.o: lex.yy.c y.tab.c
 	gcc -ggdb -c lex.yy.c
@@ -29,4 +29,4 @@ tac.o: tac.c
 	gcc -ggdb -c tac.c -Wall
 
 clean:
-	rm lex.yy.c y.tab.c y.tab.h etapa5 *.o *~
+	rm lex.yy.c y.tab.c y.tab.h etapa6 *.o *~
