@@ -244,16 +244,48 @@ void createASM(AST *ast, TAC *tac) {
 
   if (!tac) return;
 
-  if (tac->prev)
-    createASM(ast, tac->prev);
 
   // primeira parte do assembly possui as variáveis
   addData(ast, out);
+  if (!rodata) {
+    fprintf(out, ".section .rodata\n");
+    rodata = 1;
+  }
 
-  switch(tac->type) {
-    case TAC_ADD:
+  fprintf(out, ".globl main\n"
+      ".type main, @function\n");
 
-    break;
+  switch(tac->type){
+    case TAC_SYMBOL: fprintf(stderr, "TAC_SYMBOL"); break;
+    case TAC_ADD: fprintf(stderr, "TAC_ADD"); break;
+    case TAC_SUB: fprintf(stderr, "TAC_SUB"); break;
+    case TAC_MUL: fprintf(stderr, "TAC_MUL"); break;
+    case TAC_DIV: fprintf(stderr, "TAC_DIV"); break;
+    case TAC_MOVE: fprintf(stderr, "TAC_MOVE"); break;
+    case TAC_IFZ: fprintf(stderr, "TAC_IFZ"); break;
+    case TAC_LABEL: fprintf(stderr, "TAC_LABEL"); break;
+    case TAC_GREATER: fprintf(stderr, "TAC_GREATER"); break;
+    case TAC_SMALLER: fprintf(stderr, "TAC_SMALLER"); break;
+    case TAC_AND: fprintf(stderr, "TAC_AND"); break;
+    case TAC_OR: fprintf(stderr, "TAC_OR"); break;
+    case TAC_NOT: fprintf(stderr, "TAC_NOT"); break;
+    case TAC_GE: fprintf(stderr, "TAC_GE"); break;
+    case TAC_LE: fprintf(stderr, "TAC_LE"); break;
+    case TAC_EQ: fprintf(stderr, "TAC_EQ"); break;
+    case TAC_DIF: fprintf(stderr, "TAC_DIF"); break;
+    case TAC_JUMP: fprintf(stderr, "TAC_JUMP"); break;
+    case TAC_PRINT: fprintf(stderr, "TAC_PRINT"); break;
+    case TAC_READ: fprintf(stderr, "TAC_READ"); break;
+    case TAC_VEC: fprintf(stderr, "TAC_VEC"); break;
+    case TAC_VECEXP: fprintf(stderr, "TAC_VECEXP"); break;
+    case TAC_BEGINFUN: fprintf(stderr, "TAC_BEGINFUN"); break;
+    case TAC_ENDFUN: fprintf(stderr, "TAC_ENDFUN"); break;
+    case TAC_FUNCCALL: fprintf(stderr, "TAC_FUNCCALL"); break;
+    case TAC_FOR: fprintf(stderr, "TAC_FOR"); break;
+    case TAC_BREAK: fprintf(stderr, "TAC_BREAK"); break;
+    case TAC_JUMPFOR: fprintf(stderr, "TAC_JUMPFOR"); break;
+    case TAC_EXP: fprintf(stderr, "TAC_EXP"); break;
+    case TAC_RETURN: fprintf(stderr, "TAC_RETURN"); break;
 
   }
 
@@ -321,6 +353,10 @@ void addData(AST *ast, FILE *out) {
   }
   else if (ast->type == AST_LPRINT) {
     //printf("string: %s e LC: %d\n", ast->symbol->text, LC);
+    if (!rodata) {
+      fprintf(out, ".section .rodata\n");
+      rodata = 1;
+    }
     fprintf(out, ".LC%d:\n"
         ".string %s\n",
         LC, ast->symbol->text);
@@ -330,5 +366,4 @@ void addData(AST *ast, FILE *out) {
   for(int i = 0; i < MAX_SONS; i++){
     addData(ast->son[i], out);
   }
-
 }

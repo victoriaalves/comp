@@ -1,4 +1,4 @@
-int x = 10;
+long x = 10;
 int a = 100;
 int b = 1000;
 int v1[3]: 1 2 2;
@@ -6,7 +6,7 @@ int v1[3]: 1 2 2;
 int main( int x )
 {
   for (x:1,10,1)
-    print "hello";
+    print "hello \n";
   while(100){
     a = 0;
     print "Testando" "1,2,3";
