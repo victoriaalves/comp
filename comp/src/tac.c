@@ -273,7 +273,7 @@ void createASM(AST *ast, TAC *firstTac) {
     tac = tac->prev;
   }
   for (; tac; tac = tac->next) {
-    printf("tac->type: %d\n", tac->type);
+    //printf("tac->type: %d\n", tac->type);
     switch(tac->type){
       case TAC_SYMBOL: break;
       case TAC_ADD: break;
@@ -298,15 +298,19 @@ void createASM(AST *ast, TAC *firstTac) {
       case TAC_VEC: break;
       case TAC_VECEXP:  break;
       case TAC_BEGINFUN:
-                        printf("olar\n");
                         fprintf(out, "%s:\n"
                             ".LFB%d:\n"
-                            ".cfi_startproc\npushq %rbp\n.cif_def_cfa_offseet 16\n"
-                            ".cfi_offset 6, -16\nmovq %rsp, %rbp\n.cfi_def_cfa_register 6\n",
+                            "\t.cfi_startproc\n\tpushq %rbp\n\t.cif_def_cfa_offseet 16\n"
+                            "\t.cfi_offset 6, -16\n\tmovq %rsp, %rbp\n\t.cfi_def_cfa_register 6\n",
                             tac->res->text, LFB);
                         LFB++;
                         break;
-      case TAC_ENDFUN: printf("ola\n"); break;
+      case TAC_ENDFUN:
+                        fprintf(out, "\t.cfi_def_cfa 7, 8\n\tret\n\t.cfi_endproc\n"
+                            ".LFE%d:\n"
+                            "\t.size %s, .-%s\n",
+                            LFB, tac->res->text, tac->res->text);
+                        break;
       case TAC_FUNCCALL:  break;
       case TAC_FOR:  break;
       case TAC_BREAK: break;
@@ -338,12 +342,12 @@ void addData(AST *ast, FILE *out) {
 
     // teoricamente haveria um .data logo após a o primeiro .globl, porém
     // tirando ele não dá erro então nem vou booltar kk
-    fprintf(out, ".globl  %s\n"
-      ".align %d\n"
-      ".type   %s, @object\n"
-      ".size   %s, %d\n"
+    fprintf(out, "\t.globl  %s\n"
+      "\t.align %d\n"
+      "\t.type   %s, @object\n"
+      "\t.size   %s, %d\n"
       "%s:\n"
-      ".long   %s\n",
+      "\t.long   %s\n",
       ast->symbol->text, numBytes, ast->symbol->text, ast->symbol->text, numBytes, ast->symbol->text, ast->son[1]->symbol->text);
   }
   else if (ast->type == AST_VEC) {
@@ -358,23 +362,23 @@ void addData(AST *ast, FILE *out) {
 
     // caso o array tenha sido inicializado
     if (ast->son[2]) {
-      fprintf(out, ".globl\t%s\n"
-          ".align 32\n"
-          ".type %s, @object\n"
-          ".size %s, %d\n"
+      fprintf(out, "\t.globl\t%s\n"
+          "\t.align 32\n"
+          "\t.type %s, @object\n"
+          "\t.size %s, %d\n"
           "%s:\n",
         ast->symbol->text, ast->symbol->text, ast->symbol->text, numBytes, ast->symbol->text);
 
       // cria a lista de valores do array
       AST *array = ast->son[2];
       while (array) {
-        fprintf(out, ".quad %s\n",
+        fprintf(out, "\t.quad %s\n",
             array->son[0]->symbol->text);
         array = array->son[1];
       }
     }
     else {
-      fprintf(out, ".comm %s,%d,32\n",
+      fprintf(out, "\t.comm %s,%d,32\n",
           ast->symbol->text, numBytes);
     }
   }
@@ -385,7 +389,7 @@ void addData(AST *ast, FILE *out) {
       rodata = 1;
     }
     fprintf(out, ".LC%d:\n"
-        ".string %s\n",
+        "\t.string %s\n",
         LC, ast->symbol->text);
     LC++;
   }

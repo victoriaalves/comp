@@ -36,11 +36,6 @@ main:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	movl	x(%rip), %edx
-	movl	a(%rip), %eax
-	movl	%edx, %esi
-	movl	%eax, %edi
-	call	valeria
 	movl	$0, %eax
 	popq	%rbp
 	.cfi_def_cfa 7, 8
@@ -48,10 +43,6 @@ main:
 	.cfi_endproc
 .LFE0:
 	.size	main, .-main
-	.section	.rodata
-.LC0:
-	.string	"ola"
-	.text
 	.globl	valeria
 	.type	valeria, @function
 valeria:
@@ -62,13 +53,10 @@ valeria:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register 6
-	subq	$16, %rsp
 	movl	%edi, -4(%rbp)
 	movl	%esi, -8(%rbp)
-	movl	$.LC0, %edi
-	call	puts
 	nop
-	leave
+	popq	%rbp
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
