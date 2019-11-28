@@ -33,3 +33,19 @@ v1:
 .string "1,2,3"
 .globl main
 .type main, @function
+main:
+.LFB0:
+.cfi_startproc
+pushq %rbp
+.cif_def_cfa_offseet 16
+.cfi_offset 6, -16
+movq %rsp, %rbp
+.cfi_def_cfa_register 6
+test:
+.LFB1:
+.cfi_startproc
+pushq %rbp
+.cif_def_cfa_offseet 16
+.cfi_offset 6, -16
+movq %rsp, %rbp
+.cfi_def_cfa_register 6

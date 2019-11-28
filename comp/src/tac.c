@@ -1,8 +1,9 @@
 #include "tac.h"
 
 int rodata = 0;
-int LC = 0;
-
+int LC = 0;   // dados
+int LFB = 0;  // blocos de funções
+int L = 0;    // labels para blocos (por ex, for)
 
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
@@ -239,10 +240,10 @@ void tacPrintBackwards(TAC *tac){
     tacPrintSingle(tac);
 }
 
-void createASM(AST *ast, TAC *tac) {
+void createASM(AST *ast, TAC *firstTac) {
   FILE *out = fopen("asm.s", "w");
 
-  if (!tac) return;
+  if (!firstTac) return;
 
 
   // primeira parte do assembly possui as variáveis
@@ -255,40 +256,66 @@ void createASM(AST *ast, TAC *tac) {
   fprintf(out, ".globl main\n"
       ".type main, @function\n");
 
-  switch(tac->type){
-    case TAC_SYMBOL: fprintf(stderr, "TAC_SYMBOL"); break;
-    case TAC_ADD: fprintf(stderr, "TAC_ADD"); break;
-    case TAC_SUB: fprintf(stderr, "TAC_SUB"); break;
-    case TAC_MUL: fprintf(stderr, "TAC_MUL"); break;
-    case TAC_DIV: fprintf(stderr, "TAC_DIV"); break;
-    case TAC_MOVE: fprintf(stderr, "TAC_MOVE"); break;
-    case TAC_IFZ: fprintf(stderr, "TAC_IFZ"); break;
-    case TAC_LABEL: fprintf(stderr, "TAC_LABEL"); break;
-    case TAC_GREATER: fprintf(stderr, "TAC_GREATER"); break;
-    case TAC_SMALLER: fprintf(stderr, "TAC_SMALLER"); break;
-    case TAC_AND: fprintf(stderr, "TAC_AND"); break;
-    case TAC_OR: fprintf(stderr, "TAC_OR"); break;
-    case TAC_NOT: fprintf(stderr, "TAC_NOT"); break;
-    case TAC_GE: fprintf(stderr, "TAC_GE"); break;
-    case TAC_LE: fprintf(stderr, "TAC_LE"); break;
-    case TAC_EQ: fprintf(stderr, "TAC_EQ"); break;
-    case TAC_DIF: fprintf(stderr, "TAC_DIF"); break;
-    case TAC_JUMP: fprintf(stderr, "TAC_JUMP"); break;
-    case TAC_PRINT: fprintf(stderr, "TAC_PRINT"); break;
-    case TAC_READ: fprintf(stderr, "TAC_READ"); break;
-    case TAC_VEC: fprintf(stderr, "TAC_VEC"); break;
-    case TAC_VECEXP: fprintf(stderr, "TAC_VECEXP"); break;
-    case TAC_BEGINFUN: fprintf(stderr, "TAC_BEGINFUN"); break;
-    case TAC_ENDFUN: fprintf(stderr, "TAC_ENDFUN"); break;
-    case TAC_FUNCCALL: fprintf(stderr, "TAC_FUNCCALL"); break;
-    case TAC_FOR: fprintf(stderr, "TAC_FOR"); break;
-    case TAC_BREAK: fprintf(stderr, "TAC_BREAK"); break;
-    case TAC_JUMPFOR: fprintf(stderr, "TAC_JUMPFOR"); break;
-    case TAC_EXP: fprintf(stderr, "TAC_EXP"); break;
-    case TAC_RETURN: fprintf(stderr, "TAC_RETURN"); break;
+  /*
+   *  Notas sobre os labels que são adicionados no arquivo assembly:
+   *  LFB: func begin label
+   *  LFE: func end label
+   *  LBB: block begin label
+   *  LBE: block end label
+   *  Mais em:
+   *  ttps://stackoverflow.com/questions/3564752/what-is-cfi-and-lfe-in-assembly-code-produced-by-gcc-from-c-program/3570447
+   *  https://stackoverflow.com/questions/24787769/what-are-lfb-lbb-lbe-lvl-loc-in-the-compiler-generated-assembly-code
+   *
+   */
 
+  TAC *tac = firstTac;
+  while(tac->prev != NULL) {
+    tac = tac->prev;
   }
+  for (; tac; tac = tac->next) {
+    printf("tac->type: %d\n", tac->type);
+    switch(tac->type){
+      case TAC_SYMBOL: break;
+      case TAC_ADD: break;
+      case TAC_SUB: break;
+      case TAC_MUL: break;
+      case TAC_DIV: break;
+      case TAC_MOVE: break;
+      case TAC_IFZ: break;
+      case TAC_LABEL:  break;
+      case TAC_GREATER: break;
+      case TAC_SMALLER: break;
+      case TAC_AND: break;
+      case TAC_OR: break;
+      case TAC_NOT: break;
+      case TAC_GE:  break;
+      case TAC_LE:  break;
+      case TAC_EQ:  break;
+      case TAC_DIF: break;
+      case TAC_JUMP: break;
+      case TAC_PRINT: break;
+      case TAC_READ:  break;
+      case TAC_VEC: break;
+      case TAC_VECEXP:  break;
+      case TAC_BEGINFUN:
+                        printf("olar\n");
+                        fprintf(out, "%s:\n"
+                            ".LFB%d:\n"
+                            ".cfi_startproc\npushq %rbp\n.cif_def_cfa_offseet 16\n"
+                            ".cfi_offset 6, -16\nmovq %rsp, %rbp\n.cfi_def_cfa_register 6\n",
+                            tac->res->text, LFB);
+                        LFB++;
+                        break;
+      case TAC_ENDFUN: printf("ola\n"); break;
+      case TAC_FUNCCALL:  break;
+      case TAC_FOR:  break;
+      case TAC_BREAK: break;
+      case TAC_JUMPFOR: break;
+      case TAC_EXP:  break;
+      case TAC_RETURN:  break;
 
+    }
+  }
   fclose(out);
 
 }

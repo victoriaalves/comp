@@ -5,10 +5,11 @@ int b = 17894;
 int a = 0;
 long v1[SIZE] = {0,0,0,0,0,0,0,0,0,0};
 
-int test( int a, int c );
+int valeria( int a, int c );
 
-int main( int x )
+int main()
 {
+  /*
   for (x = 1; x < 10; x= x + 1)
     printf("hello \n");
   while(a < 10){
@@ -16,18 +17,19 @@ int main( int x )
     test(a, x);
     a = a + 1;
     break;
-  }
+  }*/
+  valeria(a, x);
 }
 
-int test( int a, int c ){
-  v1[a] = 2;
+int valeria( int a, int c ){
+  //v1[a] = 2;
 
-  if (a < b)
-  {
+  //if (a < b)
+  //{
     printf("ola\n");
-  }
+  /*}
   else
   {
     b = 1;
-  }
+  }*/
 }
