@@ -37,6 +37,7 @@ typedef struct hash_node
 } HASH_NODE;
 
 void hashInit(void);
+HASH_NODE *getHash();
 
 int hashAddress(char *text);
 HASH_NODE *hashFind(char *text);

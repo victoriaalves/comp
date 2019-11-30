@@ -11,6 +11,10 @@ void hashInit(void)
 		Table[i]=0;
 }
 
+HASH_NODE *getHash() {
+  return &Table;
+}
+
 int hashAddress(char *text)
 {
 	int address = 1;
