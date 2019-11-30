@@ -1,7 +1,7 @@
 #include "tac.h"
 
 int rodata = 0;
-int LC = 0;   // dados
+int LC = 0;   // texto
 int LFB = 0;  // blocos de funções
 int L = 0;    // labels para blocos (por ex, for)
 
@@ -253,9 +253,6 @@ void createASM(AST *ast, TAC *firstTac) {
     rodata = 1;
   }
 
-  fprintf(out, ".globl main\n"
-      ".type main, @function\n");
-
   /*
    *  Notas sobre os labels que são adicionados no arquivo assembly:
    *  LFB: func begin label
@@ -275,12 +272,11 @@ void createASM(AST *ast, TAC *firstTac) {
   for (; tac; tac = tac->next) {
     //printf("tac->type: %d\n", tac->type);
     switch(tac->type){
-      case TAC_SYMBOL: break;
       case TAC_ADD: break;
-      case TAC_SUB: break;
-      case TAC_MUL: break;
-      case TAC_DIV: break;
-      case TAC_MOVE: break;
+      case TAC_MOVE:
+                    fprintf(out, "\tmovl $%s, %s(%%rip)\n",
+                        tac->op1->text, tac->res->text);
+                    break;
       case TAC_IFZ: break;
       case TAC_LABEL:  break;
       case TAC_GREATER: break;
@@ -293,16 +289,22 @@ void createASM(AST *ast, TAC *firstTac) {
       case TAC_EQ:  break;
       case TAC_DIF: break;
       case TAC_JUMP: break;
-      case TAC_PRINT: break;
+      case TAC_PRINT:
+                     fprintf(out, "\tmovl $.LC%d, %%edi\n"
+                         "\tcall puts\n", --LC);
+
+                     break;
       case TAC_READ:  break;
       case TAC_VEC: break;
       case TAC_VECEXP:  break;
       case TAC_BEGINFUN:
-                        fprintf(out, "%s:\n"
+                        fprintf(out, "\t.globl %s\n"
+                            "\t.type %s, @function\n"
+                            "%s:\n"
                             ".LFB%d:\n"
-                            "\t.cfi_startproc\n\tpushq %rbp\n\t.cif_def_cfa_offseet 16\n"
+                            "\t.cfi_startproc\n\tpushq %rbp\n\t.cfi_def_cfa_offset 16\n"
                             "\t.cfi_offset 6, -16\n\tmovq %rsp, %rbp\n\t.cfi_def_cfa_register 6\n",
-                            tac->res->text, LFB);
+                            tac->res->text, tac->res->text, tac->res->text, LFB);
                         LFB++;
                         break;
       case TAC_ENDFUN:
@@ -311,7 +313,13 @@ void createASM(AST *ast, TAC *firstTac) {
                             "\t.size %s, .-%s\n",
                             LFB, tac->res->text, tac->res->text);
                         break;
-      case TAC_FUNCCALL:  break;
+      case TAC_FUNCCALL:
+                        // verificar se há parâmetros sendo passados?
+                        // se sim, mover eles? pq na real a gente não passa os
+                        // params pelas TACs, então não sei o que fazer
+                        // chamar função
+                        fprintf(out, "\tcall %s\n", tac->op1->text);
+                        break;
       case TAC_FOR:  break;
       case TAC_BREAK: break;
       case TAC_JUMPFOR: break;

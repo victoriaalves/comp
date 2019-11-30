@@ -26,34 +26,37 @@ v1:
 	.quad 2
 .section .rodata
 .LC0:
-	.string "hello \n"
-.LC1:
-	.string "Testando"
-.LC2:
-	.string "1,2,3"
-.globl main
-.type main, @function
+	.string "inhai"
+	.globl main
+	.type main, @function
 main:
 .LFB0:
 	.cfi_startproc
 	pushq %rbp
-	.cif_def_cfa_offseet 16
+	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
 	movq %rsp, %rbp
 	.cfi_def_cfa_register 6
+	movl $1, x(%rip)
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE1:
 	.size main, .-main
+	.globl test
+	.type test, @function
 test:
 .LFB1:
 	.cfi_startproc
 	pushq %rbp
-	.cif_def_cfa_offseet 16
+	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
 	movq %rsp, %rbp
 	.cfi_def_cfa_register 6
+	movl $.LC0, %edi
+	call puts
+	movl $1, a(%rip)
+	movl $1, b(%rip)
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
