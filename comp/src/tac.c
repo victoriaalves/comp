@@ -1,9 +1,6 @@
 #include "tac.h"
 
-int rodata = 0;
-int LC = 0;   // texto
-int LFB = 0;  // blocos de funções
-int L = 0;    // labels para blocos (por ex, for)
+int BL = 0;
 
 TAC* makeBinOperation(int type, TAC* code0, TAC* code1);
 TAC* makeIfThen(TAC* code0, TAC* code1);
@@ -11,7 +8,6 @@ TAC* makeIfThenElse(TAC* code0, TAC* code1, TAC* code2);
 TAC* makeWhile(TAC* code0, TAC* code1, HASH_NODE* newlabel1, HASH_NODE* newlabel2);
 TAC* makeFunc(TAC* code0, TAC* code1, TAC* code2);
 TAC* makeFor(TAC* code0, TAC* code1, TAC* code2, TAC* code3, TAC* code4, HASH_NODE* forLabel, HASH_NODE* jumpLabel);
-TAC* makeExp(TAC* code);
 TAC* makeReturn(TAC* code0);
 
 TAC* tacCreate(int type, HASH_NODE *res, HASH_NODE *op1, HASH_NODE *op2){
@@ -146,7 +142,7 @@ TAC* makeFunc(TAC* symbol, TAC* params, TAC* code){
 }
 
 TAC* makeFor(TAC* symbol, TAC* exp1, TAC* exp2, TAC* exp3, TAC* cmd, HASH_NODE* forLabel, HASH_NODE* jumpLabel){
-  TAC* forTac = tacJoin(tacJoin(tacJoin(tacCreate(TAC_IFZ, jumpLabel, symbol? symbol->res : 0, 0),exp1),exp2),exp3);
+  TAC* forTac = tacJoin(tacJoin(tacJoin(tacCreate(TAC_FOR, jumpLabel, symbol? symbol->res : 0, 0),exp1),exp2),exp3);
 
   TAC* forTacLabel = tacCreate(TAC_LABEL, forLabel, 0, 0);
 
@@ -154,10 +150,6 @@ TAC* makeFor(TAC* symbol, TAC* exp1, TAC* exp2, TAC* exp3, TAC* cmd, HASH_NODE* 
   TAC* jumpTacLabel = tacCreate(TAC_LABEL, jumpLabel, 0, 0);
 
   return tacJoin(tacJoin(tacJoin(tacJoin(tacJoin(forTacLabel, forTac),symbol),cmd),jumpTac),jumpTacLabel);
-}
-
-TAC* makeExp(TAC* code){
-  return tacCreate(TAC_EXP, code?code->res:0, 0, 0);
 }
 
 TAC* makeReturn(TAC* code0){
@@ -248,50 +240,70 @@ void createASM(AST *ast, TAC *firstTac) {
 
   // primeira parte do assembly possui as variáveis
   addData(ast, out);
-  if (!rodata) {
-    fprintf(out, ".section .rodata\n");
-    rodata = 1;
+
+
+  // voltando ao root da tac pra avaliar de cima pra baixo
+  TAC *tac = firstTac;
+  while(tac->prev != NULL) {
+    tac = tac->prev;
+  }
+  // e variáveis temporárias
+  for (; tac; tac = tac->next) {
+    addTemp(tac, out);
   }
 
-  /*
-   *  Notas sobre os labels que são adicionados no arquivo assembly:
-   *  LFB: func begin label
-   *  LFE: func end label
-   *  LBB: block begin label
-   *  LBE: block end label
-   *  Mais em:
-   *  ttps://stackoverflow.com/questions/3564752/what-is-cfi-and-lfe-in-assembly-code-produced-by-gcc-from-c-program/3570447
-   *  https://stackoverflow.com/questions/24787769/what-are-lfb-lbb-lbe-lvl-loc-in-the-compiler-generated-assembly-code
-   *
-   */
 
-  TAC *tac = firstTac;
+  fprintf(out, ".section .rodata\n");
+
+  tac = firstTac;
   while(tac->prev != NULL) {
     tac = tac->prev;
   }
   for (; tac; tac = tac->next) {
     //printf("tac->type: %d\n", tac->type);
     switch(tac->type){
-      case TAC_ADD: break;
+      case TAC_ADD: // sub, mul e div são semelhantes
+        fprintf(out, "\tmovl %s(%%rip), %%eax\n"
+            "\taddl $%s, %%eax\n"
+            "\tmovl %%eax, %s(%%rip)\n"
+            "\tmovl $0, %%eax\n",
+            tac->op1->text, tac->op2->text, tac->res->text);
+        break;
       case TAC_MOVE:
-                    fprintf(out, "\tmovl $%s, %s(%%rip)\n",
-                        tac->op1->text, tac->res->text);
-                    break;
-      case TAC_IFZ: break;
-      case TAC_LABEL:  break;
-      case TAC_GREATER: break;
+        fprintf(out, "\tmovl $%s, %s(%%rip)\n",
+            tac->op1->text, tac->res->text);
+        break;
+      case TAC_IFZ:
+        fprintf(out, "\tmovl $1, %%eax\n"
+            "\tandl %%eax, %%edx\n"
+            "\tjz .%s\n",
+            tac->res->text);
+        break;
+      case TAC_GREATER: break; // TODO alguma de comparação
       case TAC_SMALLER: break;
       case TAC_AND: break;
       case TAC_OR: break;
       case TAC_NOT: break;
       case TAC_GE:  break;
       case TAC_LE:  break;
-      case TAC_EQ:  break;
+      case TAC_EQ:
+                    fprintf(out, "\tmovl %s(%%rip), %%eax\n"
+                        "\tmovl %s(%%rip), %%edx\n"
+                        "\tcmpl %%eax, %%edx\n"
+                        "\tjne .BL%d\n"
+                        "\tmovl $1, %%edx\n"
+                        "\tjmp .BL%d\n"
+                        ".BL%d:\n"
+                        "\tmovl $0, %%edx\n"
+                        ".BL%d:\n",
+                        tac->op2->text, tac->op1->text, BL, BL+1, BL, BL+1);
+                    BL+=2;
+                    break;
       case TAC_DIF: break;
       case TAC_JUMP: break;
       case TAC_PRINT:
-                     fprintf(out, "\tmovl $.LC%d, %%edi\n"
-                         "\tcall puts\n", --LC);
+                     fprintf(out, "\tmovl $.%s, %%edi\n"
+                         "\tcall puts\n", tac->res->text);
 
                      break;
       case TAC_READ:  break;
@@ -301,17 +313,17 @@ void createASM(AST *ast, TAC *firstTac) {
                         fprintf(out, "\t.globl %s\n"
                             "\t.type %s, @function\n"
                             "%s:\n"
-                            ".LFB%d:\n"
+                            ".B%s:\n"
                             "\t.cfi_startproc\n\tpushq %rbp\n\t.cfi_def_cfa_offset 16\n"
                             "\t.cfi_offset 6, -16\n\tmovq %rsp, %rbp\n\t.cfi_def_cfa_register 6\n",
-                            tac->res->text, tac->res->text, tac->res->text, LFB);
-                        LFB++;
+                            tac->res->text, tac->res->text, tac->res->text, tac->res->text);
                         break;
       case TAC_ENDFUN:
-                        fprintf(out, "\t.cfi_def_cfa 7, 8\n\tret\n\t.cfi_endproc\n"
-                            ".LFE%d:\n"
+                        fprintf(out, "\tpopq %%rbp\n"
+                            "\t.cfi_def_cfa 7, 8\n\tret\n\t.cfi_endproc\n"
+                            ".E%s:\n"
                             "\t.size %s, .-%s\n",
-                            LFB, tac->res->text, tac->res->text);
+                            tac->res->text, tac->res->text, tac->res->text);
                         break;
       case TAC_FUNCCALL:
                         // verificar se há parâmetros sendo passados?
@@ -323,15 +335,15 @@ void createASM(AST *ast, TAC *firstTac) {
       case TAC_FOR:  break;
       case TAC_BREAK: break;
       case TAC_JUMPFOR: break;
-      case TAC_EXP:  break;
       case TAC_RETURN:  break;
+      case TAC_LABEL:
+                        fprintf(out, ".%s:\n", tac->res->text);
 
     }
   }
   fclose(out);
 
 }
-
 
 void addData(AST *ast, FILE *out) {
   // nos interessa: AST_VARDEC, AST_SYMBOL (só quando prrint), AST_VEC
@@ -391,18 +403,44 @@ void addData(AST *ast, FILE *out) {
     }
   }
   else if (ast->type == AST_LPRINT) {
-    //printf("string: %s e LC: %d\n", ast->symbol->text, LC);
-    if (!rodata) {
-      fprintf(out, ".section .rodata\n");
-      rodata = 1;
-    }
-    fprintf(out, ".LC%d:\n"
-        "\t.string %s\n",
-        LC, ast->symbol->text);
-    LC++;
+    char *token = strtok(ast->symbol->text, "\"");
+    strncpy(ast->symbol->text, token, sizeof(token));
+
+    fprintf(out, ".%s:\n"
+        "\t.string \"%s\"\n",
+        ast->symbol->text, ast->symbol->text);
   }
 
   for(int i = 0; i < MAX_SONS; i++){
     addData(ast->son[i], out);
+  }
+}
+
+void addTemp(TAC *tac, FILE *out) {
+  if(!tac) return;
+
+  if(tac->type == TAC_ADD ||
+      tac->type == TAC_SUB ||
+      tac->type == TAC_MUL ||
+      tac->type == TAC_DIV ||
+      tac->type == TAC_GREATER ||
+      tac->type == TAC_SMALLER ||
+      tac->type == TAC_AND ||
+      tac->type == TAC_OR ||
+      tac->type == TAC_AND ||
+      tac->type == TAC_NOT ||
+      tac->type == TAC_GE ||
+      tac->type == TAC_LE ||
+      tac->type == TAC_EQ ||
+      tac->type == TAC_DIF ||
+      tac->type == TAC_FUNCCALL
+    ) {
+    fprintf(out, "\t.globl  %s\n"
+        "\t.align  4\n"
+        "\t.type   %s, @object\n"
+        "\t.size   %s, 4\n"
+        "%s:\n"
+        "\t.long   %d\n",
+        tac->res->text, tac->res->text, tac->res->text, tac->res->text, 0);
   }
 }

@@ -53,5 +53,6 @@ TAC* generateCode(AST *ast, HASH_NODE* label, HASH_NODE* labelJump);
 TAC* tacJoin(TAC* tac1, TAC* tac2);
 void createASM(AST *ast, TAC *tac);
 void addData(AST *ast, FILE *out);
+void addTemp(TAC *tac, FILE *out);
 
 #endif
