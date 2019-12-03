@@ -1,15 +1,11 @@
 #include <stdio.h>
-#define SIZE 10
-int x = 17894;
-int b = 17894;
+int x = 894;
 int a = 0;
-long v1[SIZE] = {0,0,0,0,0,0,0,0,0,0};
-
-int valeria( int a, int c );
+int v1[3] = {1, 2, 2};
 
 int main()
 {
+  a = a + x;
+  printf("%d\n", a);
 }
 
-int valeria( int a, int c ){
-}

@@ -1,4 +1,4 @@
-etapa5: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o tac.o
+etapa6: y.tab.o lex.yy.o main.o hash.o astree.o semantic.o tac.o
 	gcc -ggdb -o etapa6 lex.yy.o main.o hash.o astree.o semantic.o tac.o -Wall
 
 lex.yy.o: lex.yy.c y.tab.c

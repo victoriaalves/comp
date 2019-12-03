@@ -238,6 +238,7 @@ void createASM(AST *ast, TAC *firstTac) {
   if (!firstTac) return;
 
 
+  fprintf(out, "\t.data\n");
   // primeira parte do assembly possui as variáveis
   addData(ast, out);
 
@@ -253,20 +254,23 @@ void createASM(AST *ast, TAC *firstTac) {
   }
 
 
-  fprintf(out, ".section .rodata\n");
+  fprintf(out, ".section .rodata\n"
+      ".LC0:\n\t.string \"%%d\\n\"\n"
+      "\t.text\n");
 
   tac = firstTac;
   while(tac->prev != NULL) {
     tac = tac->prev;
   }
+  int numBytes = 0;
   for (; tac; tac = tac->next) {
     //printf("tac->type: %d\n", tac->type);
     switch(tac->type){
       case TAC_ADD: // sub, mul e div são semelhantes
-        fprintf(out, "\tmovl %s(%%rip), %%eax\n"
-            "\taddl $%s, %%eax\n"
-            "\tmovl %%eax, %s(%%rip)\n"
-            "\tmovl $0, %%eax\n",
+        fprintf(out, "\tmovl %s(%%rip), %%edx\n"
+            "\tmovl %s(%%rip), %%eax\n"
+            "\taddl %%edx, %%eax\n"
+            "\tmovl %%eax, %s(%%rip)\n",
             tac->op1->text, tac->op2->text, tac->res->text);
         break;
       case TAC_MOVE:
@@ -279,7 +283,7 @@ void createASM(AST *ast, TAC *firstTac) {
             "\tjz .%s\n",
             tac->res->text);
         break;
-      case TAC_GREATER: break; // TODO alguma de comparação
+      case TAC_GREATER: break;
       case TAC_SMALLER: break;
       case TAC_AND: break;
       case TAC_OR: break;
@@ -300,15 +304,31 @@ void createASM(AST *ast, TAC *firstTac) {
                     BL+=2;
                     break;
       case TAC_DIF: break;
-      case TAC_JUMP: break;
+      case TAC_JUMP:
+                    fprintf(out, "\tjmp .%s\n",
+                        tac->res->text);
+                    break;
       case TAC_PRINT:
-                     fprintf(out, "\tmovl $.%s, %%edi\n"
-                         "\tcall puts\n", tac->res->text);
-
+                    if (tac->res) {
+                      fprintf(out, "\tmovl $.%s, %%edi\n"
+                        "\tcall puts\n", tac->res->text);
+                    }
+                    else if (tac->op1) {
+                      fprintf(out, "\tmovl %s(%%rip), %%eax\n"
+                          "\tmovl %%eax, %%esi\n"
+                          "\tmovl $.LC0, %%edi\n"
+                          "\tmovl $0, %%eax\n"
+                          "\tcall printf\n",
+                          tac->op1->text);
+                    }
                      break;
       case TAC_READ:  break;
       case TAC_VEC: break;
-      case TAC_VECEXP:  break;
+      case TAC_VECEXP:
+                    numBytes = atoi(tac->op1->text) * 4;
+                    fprintf(out, "\tmovl $%s, %s+%d(%%rip)\n",
+                        tac->op2->text, tac->res->text, numBytes);
+                      break;
       case TAC_BEGINFUN:
                         fprintf(out, "\t.globl %s\n"
                             "\t.type %s, @function\n"
